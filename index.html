@@ -4,9 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Icons library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="crossorigin="anonymous"referrerpolicy="no-referrer"/>
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>AhorrADAs</title>
 </head>
-<body>
+<body class="bg-slate-100">
+    <header>
+        <nav class="w-full h-24 p-10 flex justify-between items-center bg-emerald-400 text-white">
+            <div class="">
+                <h1 class="text-4xl p-2 font-medium rounded hover:bg-emerald-600"><a><i class="fas fa-wallet mr-2"></i> AhorrADAs</a></h1>
+            </div>
+            <ul class="flex justify-between">
+                <li class="mr-3 p-2 rounded hover:bg-emerald-600"><a><i class="fas fa-chart-line mr-1"></i> Balance</a></li>
+                <li class="mr-3 p-2 rounded hover:bg-emerald-600"><a><i class="fas fa-tag mr-1"></i> Categorías</a></li>
+                <li class="p-2 rounded hover:bg-emerald-600"><a><i class="fas fa-chart-pie mr-1"></i> Reportes</a></li>
+            </ul>
+        </nav>
+    </header>
     <script src="./js/main.js"></script>
 </body>
 </html>
