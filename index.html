@@ -35,7 +35,7 @@
     <main class="w-full p-5">
         <!-- Balance section -->
         <section class="balance">
-            <article class="p-4 mt-8 mb-4 bg-slate-50 rounded drop-shadow-lg">
+            <article class="p-4 mt-10 mb-4 bg-slate-50 rounded drop-shadow-lg">
                 <h2 class="text-3xl font-bold mb-10 mt-4">Balance</h2>
                 <p class="text-xl mb-5 flex justify-between">Ganancias<span>+$0</span></p>
                 <p class="text-xl mb-8 flex justify-between">Gastos<span>-$0</span></p>
@@ -102,8 +102,60 @@
             </article>
         </section>
 
+        <!-- New operation section -->
+        <section class="p-4 mt-10 bg-slate-50 rounded drop-shadow-lg hidden">
+            <h2 class="text-4xl font-bold mb-10 mt-4">Nueva Operación</h2>
+            <form action="">
+                <fieldset class="flex flex-col">
+                    <label for="description" class="font-bold">
+                        Descripción
+                    </label>
+                    <input type="text" name="" id="" class="p-2 my-2 border-2 rounded">    
+                </fieldset>
+                <fieldset class="flex flex-col">
+                    <label for="" class="font-bold">
+                        Monto
+                    </label>
+                    <input type="number" name="" id="" class="p-2 my-2 border-2 rounded">
+                </fieldset>
+                <fieldset class="flex flex-col">
+                    <label for="" class="font-bold">
+                        Tipo
+                    </label>
+                    <select name="" id="" class="p-2 my-2 border-2 rounded">
+                        <option value="Gasto">Gasto</option>
+                        <option value="Ganancia">Ganancia</option>
+                    </select>
+                </fieldset>
+                <fieldset class="flex flex-col">
+                    <label for="" class="font-bold">
+                        Categoría
+                    </label>
+                    <select name="" id="" class="p-2 my-2 border-2 rounded" value="Todas">
+                        <option value="Todas">Todas</option>
+                        <option value="Comida">Comida</option>
+                        <option value="Servicios">Servicios</option>
+                        <option value="Salidas">Salidas</option>
+                        <option value="Educacion">Educación</option>
+                        <option value="Transporte">Transporte</option>
+                        <option value="Trabajo">Trabajo</option>
+                    </select>
+                </fieldset>
+                <fieldset class="flex flex-col">
+                    <label for="" class="font-bold">
+                        Fecha
+                    </label>
+                    <input type="date" name="" id=""  class="p-2 my-2 border-2 rounded">
+                </fieldset>
+                <fieldset class="flex justify-end mt-8">
+                    <button class="py-2 px-4 rounded">Cancelar</button>
+                    <button class="py-2 px-4 text-white bg-green-500 rounded">Agregar</button>
+                </fieldset>
+            </form>
+        </section>
+
         <!-- Category section -->
-        <section class="category p-4 bg-slate-50 rounded drop-shadow-lg hidden">
+        <section class="category p-4 mt-10 bg-slate-50 rounded drop-shadow-lg hidden">
             <h2 class="text-4xl font-bold mb-10 mt-4">Categorías</h2>
             <fieldset class="flex flex-col">
                 <label for="name" class="font-bold mb-2">
@@ -123,7 +175,7 @@
         </section>
 
         <!-- Reports section -->
-        <section class="reports p-4 bg-slate-50 rounded drop-shadow-lg hidden">
+        <section class="reports p-4 mt-10 bg-slate-50 rounded drop-shadow-lg hidden">
             <h2 class="text-4xl font-bold mb-10 mt-4">Reportes</h2>
             <div class="flex flex-col items-center text-center mt-28 mb-32">
                 <img src="./img/chart.svg" class="w-96">
