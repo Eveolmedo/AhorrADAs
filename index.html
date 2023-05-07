@@ -10,19 +10,92 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>AhorrADAs</title>
 </head>
-<body class="bg-slate-100">
+<body class="bg-gray-200 font-sans snap-y">
     <header>
-        <nav class="w-full h-24 p-10 flex justify-between items-center bg-emerald-400 text-white">
-            <div class="">
-                <h1 class="text-4xl p-2 font-medium rounded hover:bg-emerald-600"><a><i class="fas fa-wallet mr-2"></i> AhorrADAs</a></h1>
-            </div>
-            <ul class="flex justify-between">
-                <li class="mr-3 p-2 rounded hover:bg-emerald-600"><a><i class="fas fa-chart-line mr-1"></i> Balance</a></li>
-                <li class="mr-3 p-2 rounded hover:bg-emerald-600"><a><i class="fas fa-tag mr-1"></i> Categorías</a></li>
-                <li class="p-2 rounded hover:bg-emerald-600"><a><i class="fas fa-chart-pie mr-1"></i> Reportes</a></li>
-            </ul>
+        <nav class="w-full flex justify-between bg-emerald-400 text-white">
+            <h1 class="text-4xl p-2 font-medium hover:bg-emerald-600"><a><i class="fas fa-wallet mr-2"></i> AhorrADAs</a></h1>
+            <button>
+                <i class="fas fa-bars p-5 hover:bg-emerald-600"></i>
+                <i class="fa-solid fa-xmark p-5 hover:bg-emerald-600 hidden"></i>
+            </button>
         </nav>
+        <ul class="bg-slate-50 drop-shadow-lg">
+            <li class="p-2 hover:bg-emerald-600"><a><i class="fas fa-chart-line mr-1 mt-2"></i> Balance</a></li>
+            <li class="p-2 hover:bg-emerald-600"><a><i class="fas fa-tag mr-1"></i> Categorías</a></li>
+            <li class="p-2 hover:bg-emerald-600"><a><i class="fas fa-chart-pie mr-1 mb-2"></i> Reportes</a></li>
+        </ul>
     </header>
+    <main class="w-full p-5">
+        <section class="balance hidden">
+            <aside>
+                <article class="p-4 mt-8 mb-4 bg-slate-50 rounded drop-shadow-lg">
+                    <h2 class="text-3xl font-bold mb-10 mt-4">Balance</h2>
+                    <p class="text-xl mb-5 flex justify-between">Ganancias<span>+$0</span></p>
+                    <p class="text-xl mb-8 flex justify-between">Gastos<span>-$0</span></p>
+                    <p class="text-2xl flex justify-between">Total<span>$0</span></p>
+                </article>
+                <article class="p-4 mb-4 bg-slate-50 rounded drop-shadow-lg">
+                    <div class="flex justify-between">
+                        <h2 class="text-3xl font-bold mb-4">Filtros</h2>
+                        <a class="text-blue-600">Ocultar filtros</a>
+                    </div>
+                    <fieldset class="flex flex-col">
+                        <label for="" class="font-bold">
+                        Tipo
+                        </label>
+                        <select name="" id="" class="p-2 my-2 border-2 rounded" value="Todos">
+                            <option value="Todos">Todos</option>
+                            <option value="Gasto">Gasto</option>
+                            <option value="Ganancia">Ganancia</option>
+                        </select>
+                    </fieldset>
+                    <fieldset class="flex flex-col">
+                        <label for="" class="font-bold">
+                        Categoría
+                        </label>
+                        <select name="" id="" class="p-2 my-2 border-2 rounded" value="Todas">
+                            <option value="Todas">Todas</option>
+                            <option value="Comida">Comida</option>
+                            <option value="Servicios">Servicios</option>
+                            <option value="Salidas">Salidas</option>
+                            <option value="Educacion">Educación</option>
+                            <option value="Transporte">Transporte</option>
+                            <option value="Trabajo">Trabajo</option>
+                        </select>
+                    </fieldset>
+                    <fieldset class="flex flex-col">
+                        <label for="" class="font-bold">
+                        Desde
+                        </label>
+                        <input type="date" class="p-2 my-2 border-2 rounded">
+                    </fieldset>
+                    <fieldset class="flex flex-col">
+                        <label for="" class="font-bold">
+                        Ordenar por
+                        </label>
+                        <select name="" id="" class="p-2 my-2 border-2 rounded" value="Todos">
+                            <option value="Todos">Todos</option>
+                            <option value="Gasto">Gasto</option>
+                            <option value="Ganancia">Ganancia</option>
+                        </select>
+                    </fieldset>
+                </article>
+            </aside>
+            <article class="p-4 bg-slate-50 rounded drop-shadow-lg">
+                <h2 class="text-3xl font-bold mb-8">Operaciones</h2>
+                <button class="p-2 px-3 rounded bg-emerald-400 hover:bg-emerald-600">+ Nueva operacion</button>
+                <img src="wallet.svg" class="mt-28">
+                <h3 class="text-2xl font-semibold text-center mt-10">Sin resultados</h3>
+                <p class="text-lg text-center mt-4 mb-32">Cambia los filtros o agrega operaciones</p>
+            </article>
+        </section>
+        <section class="category">
+
+        </section>
+        <section>
+            
+        </section>
+    </main>
     <script src="./js/main.js"></script>
 </body>
 </html>
