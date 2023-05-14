@@ -146,6 +146,9 @@ const initializeApp = () => {
     $("#add-operation-btn").addEventListener("click", () => {
         hideElement("#balance")
         showElement("#operation")
+        showElement("#operation")
+        showElement(".new-operation-title")
+        hideElement(".edit-operation-title")
     })
     
     $(".burger-menu").addEventListener('click', () =>{
