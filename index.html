@@ -10,40 +10,60 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>AhorrADAs</title>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-gray-100 font-sans text-neutral-700">
     <header>
         <!-- Navbar -->
-        <nav class="flex justify-between items-center p-5 bg-emerald-400 text-white">
-                <h1 class="text-4xl p-2 font-medium hover:bg-emerald-600"><a><i class="fas fa-wallet mr-2"></i> AhorrADAs</a></h1>
-                <button class="lg:hidden">
+        <nav class="flex justify-between items-center p-2 bg-emerald-400 text-white lg:p-5">
+                <h1 class="text-4xl p-2 font-medium hover:bg-emerald-600"><a href="index.html"><i class="fas fa-wallet mr-2"></i> AhorrADAs</a></h1>
+                <button class="burger-menu lg:hidden">
                     <i class="fas fa-bars p-5 hover:bg-emerald-600" id="burger-menu"></i>
-                    <i class="fa-solid fa-xmark p-5 hover:bg-emerald-600 hidden" id="close-navbar-menu"></i>
+                </button> 
+                <button class="close-navbar-menu hidden lg:hidden">
+                    <i class="fa-solid fa-xmark p-5 hover:bg-emerald-600"></i>
                 </button>
-                <ul class="flex justify-between" id="navbar-menu">
+                <ul class="hidden lg:flex justify-between" id="navbar-menu">
                     <li class="p-2 hover:bg-emerald-600 rounded" id="button-balance-section">
-                        <a><i class="fas fa-chart-line"></i> Balance</a>
+                        <a href="index.html"><i class="fas fa-chart-line mr-2"></i>Balance</a>
                     </li>
                     <li class="p-2 hover:bg-emerald-600 rounded" id="button-category-section">
-                        <a><i class="fas fa-tag"></i> Categorías</a>
+                        <a><i class="fas fa-tag mr-2"></i>Categorías</a>
                     </li>
                     <li class="p-2 hover:bg-emerald-600 rounded" id="button-reports-section">
-                        <a><i class="fas fa-chart-pie"></i> Reportes</a>
+                        <a><i class="fas fa-chart-pie mr-2"></i>Reportes</a>
                     </li>
                 </ul>
-
         </nav>
+        <div class="menu-container bg-slate-50 drop-shadow-lg lg:hidden">
+            <nav class="menu p-2 hidden">
+              <ul>
+                <li class="p-2">
+                    <a href="#"><i class="fas fa-chart-line mr-2"></i>Balance</a>
+                </li>
+                <li class="p-2">
+                    <a href="#"><i class="fas fa-tag mr-2"></i>Categorías</a>
+                </li>
+                <li class="p-2">
+                    <a href="#"><i class="fas fa-chart-pie mr-2"></i>Reportes</a>
+                </li>
+              </ul>
+            </nav>
+        </div>
+
     </header>
-    <main class="w-full p-5 lg:px-36 pt-14">
+    <main class="w-full lg:px-44 pt-10">
         <!-- Balance section -->
-        <section id="balance" class="flex">
+        <section id="balance">
+            <div class="lg:flex">
             <div class="lg:w-72 mr-5">
+                <!-- Balance -->
                 <article class="p-4 mt-10 mb-6 bg-slate-50 rounded drop-shadow-lg lg:mt-0">
                     <h2 class="text-3xl font-bold mb-10 mt-4">Balance</h2>
                     <p class="text-xl mb-5 flex justify-between">Ganancias<span>+$0</span></p>
                     <p class="text-xl mb-8 flex justify-between">Gastos<span>-$0</span></p>
                     <p class="text-2xl flex justify-between">Total<span>$0</span></p>
                 </article>
-
+            
+                <!-- Filter -->
                 <article class="p-4 mb-6 bg-slate-50 rounded drop-shadow-lg">
                     <div class="flex justify-between">
                         <h2 class="text-3xl font-bold mb-4">Filtros</h2>
@@ -86,49 +106,69 @@
                                 Ordenar por
                             </label>
                             <select name="" id="" class="p-2 my-2 border-2 rounded" value="Todos">
-                                <option value="Todos">Todos</option>
-                                <option value="Gasto">Gasto</option>
-                                <option value="Ganancia">Ganancia</option>
+                                <option value="Mas reciente">Mas reciente</option>
+                                <option value="Menos reciente">Menos reciente</option>
+                                <option value="Mayor monto">Mayor monto</option>
+                                <option value="Menor monto">Menor monto</option>
+                                <option value="A/Z">A/Z</option>
+                                <option value="Z/A">Z/A</option>
                             </select>
                         </fieldset>
                     </form>
                 </article>
             </div>
-        
+            
+            <!-- Operations -->
             <article class="p-4 bg-slate-50 rounded drop-shadow-lg lg:w-3/4">
                 <div class="md:flex justify-between">
-                    <h2 class="text-3xl font-bold mb-8 md:m-0">Operaciones</h2>
-                    <button class="p-2 px-3 rounded bg-emerald-400 hover:bg-emerald-600" id="operation-button">+ Nueva operacion</button>
+                    <h2 class="text-3xl font-bold mb-10">Operaciones</h2>
+                    <button class="h-10 p-2 mb-5 rounded bg-emerald-400 hover:bg-emerald-600" id="add-operation-btn">+ Nueva operacion</button>
                 </div>
-                <div class="flex flex-col items-center text-center">
-                    <img src="./img/wallet.svg" class="mt-28 w-96">
+                <div class="flex flex-col items-center text-center" id="no-operations"> 
+                    <img src="./img/wallet.svg" class="mt-10 lg:mt-28 w-96">
                     <h3 class="text-2xl font-semibold mt-10">Sin resultados</h3>
                     <p class="text-lg mt-4 mb-32">Cambia los filtros o agrega operaciones</p>
                 </div>
+                <table class="w-full p-2 text-left table-header">
+                    <thead>
+                        <tr>
+                            <th>Descripción</th>
+                            <th>Categoría</th>
+                            <th>Fecha</th>
+                            <th>Monto</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="" id="table-operations">
+                        
+                    </tbody>
+                </table>
             </article>
+        </div>
         </section>
 
         <!-- New operation section -->
-        <section class="p-4 mt-10 bg-slate-50 rounded drop-shadow-lg hidden" id="operation">
-            <h2 class="text-4xl font-bold mb-10 mt-4">Nueva Operación</h2>
+        <section class=" p-4 mt-10 bg-slate-50 rounded drop-shadow-lg hidden" id="operation">
+            <h2 class="text-4xl font-bold mb-10 mt-4 new-operation-title">Nueva Operación</h2>
+            <h2 class="text-4xl font-bold mb-10 mt-4 hidden edit-operation-title">Editar Operación</h2>
             <form action="">
                 <fieldset class="flex flex-col">
                     <label for="description" class="font-bold">
                         Descripción
                     </label>
-                    <input type="text" name="" id="" class="p-2 my-2 border-2 rounded">    
+                    <input type="text" name="" id="description" class="p-2 my-2 border-2 rounded">    
                 </fieldset>
                 <fieldset class="flex flex-col">
                     <label for="" class="font-bold">
                         Monto
                     </label>
-                    <input type="number" name="" id="" class="p-2 my-2 border-2 rounded">
+                    <input type="number" name="" id="amount" value="0" class="p-2 my-2 border-2 rounded">
                 </fieldset>
                 <fieldset class="flex flex-col">
                     <label for="" class="font-bold">
                         Tipo
                     </label>
-                    <select name="" id="" class="p-2 my-2 border-2 rounded">
+                    <select name="" id="type" class="p-2 my-2 border-2 rounded">
                         <option value="Gasto">Gasto</option>
                         <option value="Ganancia">Ganancia</option>
                     </select>
@@ -137,7 +177,7 @@
                     <label for="" class="font-bold">
                         Categoría
                     </label>
-                    <select name="" id="" class="p-2 my-2 border-2 rounded" value="Todas">
+                    <select name="" id="form-category" class="p-2 my-2 border-2 rounded" value="Todas">
                         <option value="Todas">Todas</option>
                         <option value="Comida">Comida</option>
                         <option value="Servicios">Servicios</option>
@@ -151,11 +191,12 @@
                     <label for="" class="font-bold">
                         Fecha
                     </label>
-                    <input type="date" name="" id=""  class="p-2 my-2 border-2 rounded">
+                    <input type="date" name="" id="date"  class="p-2 my-2 border-2 rounded">
                 </fieldset>
                 <fieldset class="flex justify-end mt-8">
                     <button class="py-2 px-4 rounded">Cancelar</button>
-                    <button class="py-2 px-4 text-white bg-green-500 rounded">Agregar</button>
+                    <button class="py-2 px-4 text-white bg-green-500 rounded" id="btn-submit">Agregar</button>
+                    <button class="py-2 px-4 text-white bg-green-500 rounded hidden" id="btn-edit">Editar</button>
                 </fieldset>
             </form>
         </section>
