@@ -67,8 +67,20 @@ const renderOperation = (operations) => {
     }
 }
 
-const renderCategories = (categories) => {
-    cleanContainer("#table-category")
+const renderProfessionOptions = (categories) => {
+    // cleanContainer("")
+    for (const { categoryName, id } of categories) { 
+        $("#form-category").innerHTML += `
+            <option value="${id}">${categoryName}</option>
+        `
+        $("#filter-category").innerHTML += `
+            <option value="${id}">${categoryName}</option>
+        `
+    }
+}
+
+const renderCategoriesTable = (categories) => {
+    // cleanContainer("")
     for (const { categoryName } of categories) { 
         $("#table-category").innerHTML += `
         <tr>
@@ -149,7 +161,8 @@ const initializeApp = () => {
     renderOperation(allOperations)
 
     setLocalInfo("categories", allCategories)
-    renderCategories(allCategories)
+    renderCategoriesTable(allCategories)
+    renderProfessionOptions(allCategories)
 
     $("#btn-submit").addEventListener("click", (e) => {
         e.preventDefault()
@@ -168,13 +181,13 @@ const initializeApp = () => {
 
     /* $("#button-balance-section").addEventListener("click", () => {
         showElement($("#balance"))
-        hideElement($("#category"))
+        hideElement($("#category-section"))
         hideElement($("#reports"))                  POR AHORA NO
         hideElement($("#operation"))
     }) */
     
     $("#button-category-section").addEventListener("click", () => {
-        showElement("#category")
+        showElement("#category-section")
         hideElement("#balance")
         hideElement("#reports")
         hideElement("#operation")
@@ -183,7 +196,7 @@ const initializeApp = () => {
     $("#button-reports-section").addEventListener("click", () => {
         showElement("#reports")
         hideElement("#balance")
-        hideElement("#category")
+        hideElement("#category-section")
         hideElement("#operation")
     })
     
