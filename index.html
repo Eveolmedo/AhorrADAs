@@ -48,7 +48,6 @@
               </ul>
             </nav>
         </div>
-
     </header>
     <main class="w-full lg:px-44 pt-10">
         <!-- Balance section -->
@@ -56,10 +55,10 @@
             <div class="lg:flex">
             <div class="lg:w-72 mr-5">
                 <!-- Balance -->
-                <article class="p-4 mt-10 mb-6 bg-slate-50 rounded drop-shadow-lg lg:mt-0">
+                <article id="balance-article" class="p-4 mt-10 mb-6 bg-slate-50 rounded drop-shadow-lg lg:mt-0">
                     <h2 class="text-3xl font-bold mb-10 mt-4">Balance</h2>
-                    <p class="text-xl mb-5 flex justify-between">Ganancias<span>+$0</span></p>
-                    <p class="text-xl mb-8 flex justify-between">Gastos<span>-$0</span></p>
+                    <p class="text-xl mb-5 flex justify-between">Ganancias<span class="text-green-500">+$0</span></p>
+                    <p class="text-xl mb-8 flex justify-between">Gastos<span class="text-red-900">-$0</span></p>
                     <p class="text-2xl flex justify-between">Total<span>$0</span></p>
                 </article>
             
@@ -121,7 +120,7 @@
             <!-- Operations -->
             <article class="p-4 bg-slate-50 rounded drop-shadow-lg lg:w-3/4">
                 <div class="md:flex justify-between">
-                    <h2 class="text-3xl font-bold mb-10">Operaciones</h2>
+                    <h2 class="text-3xl font-bold mb-5">Operaciones</h2>
                     <button class="h-10 p-2 mb-5 rounded bg-emerald-400 hover:bg-emerald-600" id="add-operation-btn">+ Nueva operacion</button>
                 </div>
                 <div class="flex flex-col items-center text-center" id="no-operations"> 
@@ -129,7 +128,7 @@
                     <h3 class="text-2xl font-semibold mt-10">Sin resultados</h3>
                     <p class="text-lg mt-4 mb-32">Cambia los filtros o agrega operaciones</p>
                 </div>
-                <table class="w-full p-2 text-left table-header">
+                <table class="w-full text-center border-separate border-spacing-y-6 table-header">
                     <thead>
                         <tr>
                             <th>Descripción</th>
@@ -202,23 +201,25 @@
         </section>
 
         <!-- Category section -->
-        <section class="p-4 mt-10 bg-slate-50 rounded drop-shadow-lg hidden" id="category">
-            <h2 class="text-4xl font-bold mb-10 mt-4">Categorías</h2>
-            <fieldset class="flex flex-col">
-                <label for="name" class="font-bold mb-2">
-                    Nombre
-                </label>
-                <fieldset class="flex">
-                    <input type="text" class="w-full mr-2 border-2 rounded" name="name-category" id="">
-                    <button class="py-2 px-4 text-white bg-green-500 rounded">Agregar</button>
+        <section class="px-28">
+            <div class="p-4 mt-10 bg-slate-50 rounded drop-shadow-lg hidden" id="category">
+                <h2 class="text-4xl font-bold mb-10 mt-4">Categorías</h2>
+                <fieldset class="flex flex-col">
+                    <label for="name" class="font-bold mb-2">
+                        Nombre
+                    </label>
+                    <fieldset class="flex">
+                        <input type="text" class="w-full mr-2 border-2 rounded" name="name-category" id="">
+                        <button class="py-2 px-4 text-white bg-green-500 rounded">Agregar</button>
+                    </fieldset>
                 </fieldset>
-            </fieldset>
 
-            <!-- Category Table -->
-            <table class="">
-                <tbody id="table-category">
-                </tbody>
-            </table>
+                <!-- Category Table -->
+                <table class="w-full text-left border-separate border-spacing-y-4" id="table-category">
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </section>
 
         <!-- Reports section -->
