@@ -46,9 +46,10 @@ const renderOperation = (operations) => {
     if (operations.length) {
         hideElement("#no-operations")
         for (const {id, description, amount, category, date} of operations){
+            const categorySelected = getLocalInfo("categories").find(cat => cat.id === category)
             $("#table-operations").innerHTML += `
                 <td class="font-bold">${description}</td>
-                <td class="text-emerald-600">${category}</td>
+                <td class="text-emerald-600">${categorySelected.categoryName}</td>
                 <td>${date}</td>
                 <td>${amount}</td>
                 <td>
@@ -67,8 +68,8 @@ const renderOperation = (operations) => {
     }
 }
 
-const renderProfessionOptions = (categories) => {
-    // cleanContainer("")
+const renderCategoriesOptions = (categories) => {
+    cleanContainer("#form-category")
     for (const { categoryName, id } of categories) { 
         $("#form-category").innerHTML += `
             <option value="${id}">${categoryName}</option>
@@ -80,7 +81,7 @@ const renderProfessionOptions = (categories) => {
 }
 
 const renderCategoriesTable = (categories) => {
-    // cleanContainer("")
+    cleanContainer("#table-category")
     for (const { categoryName } of categories) { 
         $("#table-category").innerHTML += `
         <tr>
@@ -109,11 +110,18 @@ const saveOperationInfo = (operationId) => {
     }
 }
 
-const addOperationInfo = () => {
-    const currentOperation = getLocalInfo("operations")  // agarro las operaciones que tengo en el local actualmente
-    const newOperation = saveOperationInfo()  // guardo la informacion que puso el usuario
-    currentOperation.push(newOperation) // accedo a lo que esta guardado en el local y agrego la nueva info
-    setLocalInfo("operations", currentOperation) // mando la nueva info al local en la key operations
+const saveCategoryInfo = () => {
+    return {
+        id: randomId(),
+        categoryName: $("#new-category").value
+    }
+}
+
+const sendNewData = (key, callback) => {
+    const currentData = getLocalInfo(key) // agarro las operaciones que tengo en el local actualmente
+    const newData = callback() // guardo la informacion que puso el usuario
+    currentData.push(newData) // accedo a lo que esta guardado en el local y agrego la nueva info
+    setLocalInfo(key, currentData) // mando la nueva info al local en la key operations
 }
 
 const deleteOperation = (id) => {
@@ -162,11 +170,11 @@ const initializeApp = () => {
 
     setLocalInfo("categories", allCategories)
     renderCategoriesTable(allCategories)
-    renderProfessionOptions(allCategories)
+    renderCategoriesOptions(allCategories)
 
     $("#btn-submit").addEventListener("click", (e) => {
         e.preventDefault()
-        addOperationInfo()
+        sendNewData("operations", saveOperationInfo)
         // aca agregar gasto o ganancia
     })
 
@@ -176,6 +184,14 @@ const initializeApp = () => {
         hideElement("#operation")
         showElement("#balance")
         renderOperation(getLocalInfo("operations")) // si no lo pongo tengo que actualizar el html para que aparezca lo que edite 
+    })
+
+    $("#btn-submit-category").addEventListener("click", (e) => {
+        e.preventDefault()
+        sendNewData("categories", saveCategoryInfo)
+        const currentCategories = getLocalInfo("categories")
+        renderCategoriesTable(currentCategories)
+        renderCategoriesOptions(currentCategories)
     })
 
 
