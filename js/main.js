@@ -1,5 +1,4 @@
 const $ = (selector) => document.querySelector(selector)
-const $$ = (selector) => document.querySelectorAll(selector)
 
 const showElement = (selector) => $(selector).classList.remove("hidden")
 const hideElement = (selector) => $(selector).classList.add("hidden")
@@ -82,15 +81,15 @@ const renderCategoriesOptions = (categories) => {
 
 const renderCategoriesTable = (categories) => {
     cleanContainer("#table-category")
-    for (const { categoryName } of categories) { 
+    for (const { categoryName, id } of categories) { 
         $("#table-category").innerHTML += `
         <tr>
             <td class="text-emerald-600">${categoryName}</td>
             <td>
-                <button class="px-2 py-1 rounded text-white bg-green-500 hover:bg-lime-900">
+                <button class="px-2 py-1 rounded text-white bg-green-500 hover:bg-lime-900" onclick="editCategoryTable('${id}')">
                     <i class="fa-solid fa-pencil"></i>
                 </button>
-                <button class="px-2 py-1 rounded text-white bg-red-800 hover:bg-red-900">
+                <button class="px-2 py-1 rounded text-white bg-red-800 hover:bg-red-900" onclick="deleteCategory('${id}')">
                     <i class="fa-solid fa-trash"></i>
                 </button>
             </td>
@@ -106,13 +105,13 @@ const saveOperationInfo = (operationId) => {
         amount: $("#amount").valueAsNumber,
         type: $("#type").value,
         category: $("#form-category").value,
-        date: $("#date").value
+        date: $(".date").value
     }
 }
 
-const saveCategoryInfo = () => {
+const saveCategoryInfo = (categoryId) => {
     return {
-        id: randomId(),
+        id: categoryId ? categoryId : randomId(),
         categoryName: $("#new-category").value
     }
 }
@@ -132,9 +131,9 @@ const deleteOperation = (id) => {
 
 const editOperation = () => {
     const operationId = $("#btn-edit").getAttribute("data-id")
-    const editedOperation = getLocalInfo("operations").map((operation) =>{
+    const editedOperation = getLocalInfo("operations").map((operation) => {
         if(operation.id === operationId){
-            return saveOperationInfo()
+            return saveOperationInfo(operation.id)
         }
         return operation
     })
@@ -154,12 +153,7 @@ const editOperationForm = (id) => {
     $("#amount").valueAsNumber = operationSelect.amount
     $("#type").value = operationSelect.type
     $("#form-category").value = operationSelect.category
-    $("#date").value = operationSelect.date
-}
-
-const addCategory = () => {
-    const currentCategory = getLocalInfo("categories")
-    console.log(currentCategory)
+    $(".date").value = operationSelect.date
 }
 
 // INITIALIZE APP
@@ -193,8 +187,7 @@ const initializeApp = () => {
         renderCategoriesTable(currentCategories)
         renderCategoriesOptions(currentCategories)
     })
-
-
+    
     /* $("#button-balance-section").addEventListener("click", () => {
         showElement($("#balance"))
         hideElement($("#category-section"))

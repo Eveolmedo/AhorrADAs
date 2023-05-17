@@ -92,7 +92,7 @@
                             <label for="" class="font-bold">
                                 Desde
                             </label>
-                            <input type="date" class="p-2 my-2 border-2 rounded">
+                            <input type="date" class="p-2 my-2 border-2 rounded date">
                         </fieldset>
                         <fieldset class="flex flex-col">
                             <label for="" class="font-bold">
@@ -178,7 +178,7 @@
                     <label for="" class="font-bold">
                         Fecha
                     </label>
-                    <input type="date" name="" id="date"  class="p-2 my-2 border-2 rounded">
+                    <input type="date" name="" class="p-2 my-2 border-2 rounded date">
                 </fieldset>
                 <fieldset class="flex justify-end mt-8">
                     <button class="py-2 px-4 rounded">Cancelar</button>
@@ -207,6 +207,19 @@
                     <tbody>
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Edit category -->
+            <div class="p-4 mt-10 bg-slate-50 rounded drop-shadow-lg hidden" id="edit-category-section">
+                <h2 class="text-4xl font-bold mb-10 mt-4">Editar Categoría</h2>
+                <label for="name" class="font-bold mb-2">
+                    Nombre
+                </label>
+                <input type="text" class="w-full p-2 mt-2 border-2 rounded" id="edit-category-input">
+                <fieldset class="flex justify-end mt-8">
+                    <button class="py-2 px-4 rounded">Cancelar</button>
+                    <button class="py-2 px-4 text-white bg-green-500 rounded" id="btn-category-edit">Editar</button>
+                </fieldset>
             </div>
         </section>
 
