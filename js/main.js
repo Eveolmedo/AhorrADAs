@@ -156,6 +156,29 @@ const editOperationForm = (id) => {
     $(".date").value = operationSelect.date
 }
 
+const editCategory = () => {
+    const categoryId = $("#btn-category-edit").getAttribute("data-id")
+    const editedCategory = getLocalInfo("categories").map((category) =>{
+        if (category.id === categoryId) {    // por cada categoria del array localizo el que me coincide con el id
+            return saveCategoryInfo(category.id) // si es true guardo la info del form, lo que modifique lo guarde
+        }
+        return category // si no se cumple devuelvo lo que no se cambio
+    })
+    setLocalInfo("categories", editedCategory)
+  }
+  
+const editCategoryTable = (id) => {
+    hideElement("#table-category")
+    hideElement("#btn-submit-category")
+    hideElement(".category-title")
+    showElement(".btns-edit-category")
+    showElement(".edit-category-title")
+    $("#btn-category-edit").setAttribute("data-id", id) 
+    const categorySelect = getLocalInfo("categories").find((category) => category.id === id)
+    $("#new-category").value = categorySelect.categoryName  // no esta aca el problema, aca me pone el value del id que recibo 
+}
+  
+
 // INITIALIZE APP
 
 const initializeApp = () => {
@@ -180,6 +203,17 @@ const initializeApp = () => {
         renderOperation(getLocalInfo("operations")) // si no lo pongo tengo que actualizar el html para que aparezca lo que edite 
     })
 
+    $("#btn-category-edit").addEventListener("click", (e) => {
+        e.preventDefault()
+        editCategory()
+        hideElement(".btns-edit-category")
+        hideElement(".edit-category-title")
+        showElement("#table-category")
+        showElement("#btn-submit-category")
+        showElement(".category-title")
+        renderCategoriesTable(getLocalInfo("categories"))
+      })
+    
     $("#btn-submit-category").addEventListener("click", (e) => {
         e.preventDefault()
         sendNewData("categories", saveCategoryInfo)
