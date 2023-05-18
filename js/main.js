@@ -44,7 +44,7 @@ const renderOperation = (operations) => {
     $("#table-operations").innerHTML = ""
     if (operations.length) {
         hideElement("#no-operations")
-        for (const {id, description, amount, category, date} of operations){
+        for (const {id, description, amount, type, category, date} of operations){
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category)
             $("#table-operations").innerHTML += `
                 <td class="font-bold">${description}</td>
@@ -105,7 +105,7 @@ const saveOperationInfo = (operationId) => {
         amount: $("#amount").valueAsNumber,
         type: $("#type").value,
         category: $("#form-category").value,
-        date: $(".date").value
+        date: $("#date").value
     }
 }
 
@@ -126,6 +126,7 @@ const sendNewData = (key, callback) => {
 const deleteOperation = (id) => {
     const currentOperation = getLocalInfo("operations").filter((operation) => operation.id !== id) // guardo todos menos ese
     setLocalInfo("operations", currentOperation)
+    showBalance(getLocalInfo("operations"))
     renderOperation(currentOperation)
 }
 
@@ -153,7 +154,7 @@ const editOperationForm = (id) => {
     $("#amount").valueAsNumber = operationSelect.amount
     $("#type").value = operationSelect.type
     $("#form-category").value = operationSelect.category
-    $(".date").value = operationSelect.date
+    $("#date").value = operationSelect.date
 }
 
 const editCategory = () => {
@@ -177,7 +178,38 @@ const editCategoryTable = (id) => {
     const categorySelect = getLocalInfo("categories").find((category) => category.id === id)
     $("#new-category").value = categorySelect.categoryName  // no esta aca el problema, aca me pone el value del id que recibo 
 }
-  
+
+const showBalance = (operations) => {
+    let contador = 0
+    let contador2 = 0
+    if (operations.length) { 
+        for (const operation of operations) {
+            if (operation.type === "Ganancia") {
+                contador += operation.amount
+                $(".revenue").innerText = `+$${contador}`
+            } else {
+                contador2 += operation.amount
+                $(".spent").innerText = `-$${contador2}`
+            }
+        }
+        const total = contador - contador2
+        if (total > 0){
+            $(".total").classList.add("text-green-500")
+            $(".total").classList.remove("text-red-900")
+            $(".total").innerText = `+$${total}`
+        } else {
+            $(".total").classList.add("text-red-900")
+            $(".total").classList.remove("text-green-500")
+            $(".total").innerText = `-$${-total}`
+        }
+    }
+    else {
+        $(".total").innerText = `$0`                   // falta que ponga en 0 la ganancia y el gasto
+        $(".total").classList.remove("text-green-500")
+        $(".total").classList.remove("text-red-900")
+    }
+}
+
 
 // INITIALIZE APP
 
@@ -188,6 +220,7 @@ const initializeApp = () => {
     setLocalInfo("categories", allCategories)
     renderCategoriesTable(allCategories)
     renderCategoriesOptions(allCategories)
+    showBalance(allOperations)
 
     $("#btn-submit").addEventListener("click", (e) => {
         e.preventDefault()
