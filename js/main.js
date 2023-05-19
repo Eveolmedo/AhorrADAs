@@ -41,7 +41,7 @@ const allOperations = getLocalInfo("operations") || []   // ejecuta lo que hay e
 const allCategories = getLocalInfo("categories") || defaultCategories
 
 const renderOperation = (operations) => {
-    $("#table-operations").innerHTML = ""
+    cleanContainer("#table-operations")
     if (operations.length) {
         hideElement("#no-operations")
         for (const {id, description, amount, type, category, date} of operations){
@@ -59,7 +59,7 @@ const renderOperation = (operations) => {
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 </td>
-            `
+            `  
         }
     } else {
         showElement("#no-operations")
@@ -95,6 +95,17 @@ const renderCategoriesTable = (categories) => {
             </td>
         </tr>
         `
+    }
+}
+
+const renderReportTable = (operations) => {
+    cleanContainer(".table-reports")
+    if (operations.length){
+        hideElement("#no-reports")
+        showElement(".table-reports")
+    } else{
+        showElement("#no-reports")
+        hideElement(".reports-table-section")
     }
 }
 
@@ -210,7 +221,6 @@ const showBalance = (operations) => {
     }
 }
 
-
 // INITIALIZE APP
 
 const initializeApp = () => {
@@ -220,7 +230,10 @@ const initializeApp = () => {
     setLocalInfo("categories", allCategories)
     renderCategoriesTable(allCategories)
     renderCategoriesOptions(allCategories)
-    showBalance(allOperations)
+
+    showBalance(getLocalInfo("operations"))
+
+    renderReportTable(allOperations)
 
     $("#btn-submit").addEventListener("click", (e) => {
         e.preventDefault()
