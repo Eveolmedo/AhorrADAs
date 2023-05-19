@@ -103,12 +103,73 @@ const renderReportTable = (operations) => {
     if (operations.length){
         hideElement("#no-reports")
         showElement(".table-reports")
+        $(".table-reports").innerHTML += `
+            <td class="text-emerald-600">${categoryMoreRevenue(operations)[0]}</td>
+            <td class="">${categoryMoreRevenue(operations)[1]}</td>
+            <td class="text-emerald-600">${categoryMoreSpent(operations)[0]}</td>
+            <td class="">${categoryMoreSpent(operations)[1]}</td>
+        `
+        
     } else{
         showElement("#no-reports")
         hideElement(".reports-table-section")
     }
 }
 
+
+// puede mejorar !!!!
+const categoryMoreRevenue = (operations) => {
+    let mejorCategoria = {}
+    for (const operation of operations) {
+        if (!mejorCategoria[operation.category] && operation.type === "Ganancia"){
+            mejorCategoria[operation.category] = operation.amount
+        } if (operation.type === "Ganancia" && mejorCategoria[operation.category]) {
+            mejorCategoria[operation.category] = operation.amount
+        }
+    }
+    let nombre = "";
+    let precio = 0;
+    // por cada elemento de mejor categoria
+    for (const indice in mejorCategoria) {
+        // el primer elemento es mayor  al precio ?
+        if (mejorCategoria[indice] > precio) {
+            // si es guarda en precio el numero
+            precio = mejorCategoria[indice]
+            // y en nombre el id
+            nombre = indice
+        }
+    }
+    const categorySelected = getLocalInfo("categories").find(cat => cat.id === nombre)
+    return [categorySelected.categoryName, precio]
+}
+
+// puede mejorar !!!!
+const categoryMoreSpent = (operations) => {
+    let mejorCategoria = {}
+    for (const operation of operations) {
+        if (!mejorCategoria[operation.category] && operation.type === "Gasto"){
+            mejorCategoria[operation.category] = operation.amount
+        } if (operation.type === "Gasto" && mejorCategoria[operation.category]) {
+            mejorCategoria[operation.category] = operation.amount
+        }
+    }
+    console.log(mejorCategoria)
+    let nombre = "";
+    let precio = 0;
+    // por cada elemento de mejor categoria
+    for (const indice in mejorCategoria) {
+        // el primer elemento es mayor  al precio ?
+        if (mejorCategoria[indice] > precio) {
+            // si es guarda en precio el numero
+            precio = mejorCategoria[indice]
+            // y en nombre el id
+            nombre = indice
+        }
+    }
+    const categorySelected = getLocalInfo("categories").find(cat => cat.id === nombre)
+    return [categorySelected.categoryName, precio]
+}
+  
 const saveOperationInfo = (operationId) => {
     return {
         id: operationId ? operationId : randomId(),
@@ -233,7 +294,7 @@ const initializeApp = () => {
 
     showBalance(getLocalInfo("operations"))
 
-    renderReportTable(allOperations)
+    renderReportTable(getLocalInfo("operations"))
 
     $("#btn-submit").addEventListener("click", (e) => {
         e.preventDefault()
