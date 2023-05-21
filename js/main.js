@@ -105,71 +105,27 @@ const renderReportTable = (operations) => {
         showElement(".table-reports")
         $(".table-reports").innerHTML += `
             <td class="text-emerald-600">${categoryMoreRevenue(operations)[0]}</td>
-            <td class="">${categoryMoreRevenue(operations)[1]}</td>
+            <td class="text-green-500">+$${categoryMoreRevenue(operations)[1]}</td>
             <td class="text-emerald-600">${categoryMoreSpent(operations)[0]}</td>
-            <td class="">${categoryMoreSpent(operations)[1]}</td>
+            <td class="text-red-900">-$${categoryMoreSpent(operations)[1]}</td>
         `
-        
+        for (const category in totalsByCategory) {
+            const categorySelected = getLocalInfo("categories").find(cat => cat.id === category)
+            $(".table-reports-category").innerHTML += `
+            <td class="text-emerald-600">${categorySelected.categoryName}</td>
+            <td class="text-green-500">+$${totalsByCategory[category].ganancias}</td>
+            <td class="text-red-900">-$${totalsByCategory[category].gastos}</td>
+            <td>$${totalsByCategory[category].ganancias - totalsByCategory[category].gastos}</td>
+            `
+        }
+
+
     } else{
         showElement("#no-reports")
         hideElement(".reports-table-section")
     }
 }
 
-
-// puede mejorar !!!!
-const categoryMoreRevenue = (operations) => {
-    let mejorCategoria = {}
-    for (const operation of operations) {
-        if (!mejorCategoria[operation.category] && operation.type === "Ganancia"){
-            mejorCategoria[operation.category] = operation.amount
-        } if (operation.type === "Ganancia" && mejorCategoria[operation.category]) {
-            mejorCategoria[operation.category] = operation.amount
-        }
-    }
-    let nombre = "";
-    let precio = 0;
-    // por cada elemento de mejor categoria
-    for (const indice in mejorCategoria) {
-        // el primer elemento es mayor  al precio ?
-        if (mejorCategoria[indice] > precio) {
-            // si es guarda en precio el numero
-            precio = mejorCategoria[indice]
-            // y en nombre el id
-            nombre = indice
-        }
-    }
-    const categorySelected = getLocalInfo("categories").find(cat => cat.id === nombre)
-    return [categorySelected.categoryName, precio]
-}
-
-// puede mejorar !!!!
-const categoryMoreSpent = (operations) => {
-    let mejorCategoria = {}
-    for (const operation of operations) {
-        if (!mejorCategoria[operation.category] && operation.type === "Gasto"){
-            mejorCategoria[operation.category] = operation.amount
-        } if (operation.type === "Gasto" && mejorCategoria[operation.category]) {
-            mejorCategoria[operation.category] = operation.amount
-        }
-    }
-    console.log(mejorCategoria)
-    let nombre = "";
-    let precio = 0;
-    // por cada elemento de mejor categoria
-    for (const indice in mejorCategoria) {
-        // el primer elemento es mayor  al precio ?
-        if (mejorCategoria[indice] > precio) {
-            // si es guarda en precio el numero
-            precio = mejorCategoria[indice]
-            // y en nombre el id
-            nombre = indice
-        }
-    }
-    const categorySelected = getLocalInfo("categories").find(cat => cat.id === nombre)
-    return [categorySelected.categoryName, precio]
-}
-  
 const saveOperationInfo = (operationId) => {
     return {
         id: operationId ? operationId : randomId(),
@@ -282,6 +238,84 @@ const showBalance = (operations) => {
     }
 }
 
+// REPORTS SECTION
+
+// puede mejorar !!!!
+const categoryMoreRevenue = (operations) => {
+    let mejorCategoria = {}
+    for (const operation of operations) {
+        if (!mejorCategoria[operation.category] && operation.type === "Ganancia"){
+            mejorCategoria[operation.category] = operation.amount
+        } if (operation.type === "Ganancia" && mejorCategoria[operation.category]) {
+            mejorCategoria[operation.category] = operation.amount
+        }
+    }
+    let nombre = "";
+    let precio = 0;
+    // por cada elemento de mejor categoria
+    for (const indice in mejorCategoria) {
+        // el primer elemento es mayor  al precio ?
+        if (mejorCategoria[indice] > precio) {
+            // si es guarda en precio el numero
+            precio = mejorCategoria[indice]
+            // y en nombre el id
+            nombre = indice
+        }
+    }
+    const categorySelected = getLocalInfo("categories").find(cat => cat.id === nombre)
+    return [categorySelected.categoryName, precio]
+}
+
+// puede mejorar !!!!
+const categoryMoreSpent = (operations) => {
+    let mejorCategoria = {}
+    for (const operation of operations) {
+        if (!mejorCategoria[operation.category] && operation.type === "Gasto"){
+            mejorCategoria[operation.category] = operation.amount
+        } if (operation.type === "Gasto" && mejorCategoria[operation.category]) {
+            mejorCategoria[operation.category] = operation.amount
+        }
+    }
+    let nombre = "";
+    let precio = 0;
+    // por cada elemento de mejor categoria
+    for (const indice in mejorCategoria) {
+        // el primer elemento es mayor  al precio ?
+        if (mejorCategoria[indice] > precio) {
+            // si es guarda en precio el numero
+            precio = mejorCategoria[indice]
+            // y en nombre el id
+            nombre = indice
+        }
+    }
+    const categorySelected = getLocalInfo("categories").find(cat => cat.id === nombre)
+    return [categorySelected.categoryName, precio]
+}
+
+const totalsByCategory = (operations) => {
+    const totals = {}
+    operations.forEach(operation => {
+      const category = operation.category
+      const amount = operation.amount
+    
+      if (!totalsByCategory[category]) {
+        totalsByCategory[category] = {
+          gastos: 0,
+          ganancias: 0
+        };
+      }
+    
+      if (operation.type === 'Gasto') {
+        totalsByCategory[category].gastos += amount
+      } else if (operation.type === 'Ganancia') {
+        totalsByCategory[category].ganancias += amount
+      }
+    })
+    return totals
+}
+
+
+
 // INITIALIZE APP
 
 const initializeApp = () => {
@@ -295,6 +329,8 @@ const initializeApp = () => {
     showBalance(getLocalInfo("operations"))
 
     renderReportTable(getLocalInfo("operations"))
+
+    totalsByCategory(getLocalInfo("operations"))
 
     $("#btn-submit").addEventListener("click", (e) => {
         e.preventDefault()
