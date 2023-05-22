@@ -44,7 +44,7 @@ const renderOperation = (operations) => {
     cleanContainer("#table-operations")
     if (operations.length) {
         hideElement("#no-operations")
-        for (const {id, description, amount, type, category, date} of operations){
+        for (const {id, description, amount, category, date} of operations){
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category)
             $("#table-operations").innerHTML += `
                 <td class="font-bold">${description}</td>
@@ -108,6 +108,8 @@ const renderReportTable = (operations) => {
             <td class="text-green-500">+$${categoryMoreRevenue(operations)[1]}</td>
             <td class="text-emerald-600">${categoryMoreSpent(operations)[0]}</td>
             <td class="text-red-900">-$${categoryMoreSpent(operations)[1]}</td>
+            <td class="text-emerald-600">${categoryMoreBalance(operations)[0]}</td>
+            <td>$${categoryMoreBalance(operations)[1]}</td>
         `
         
         for (const category of totalsByCategory(getLocalInfo("operations"))) {
@@ -118,13 +120,25 @@ const renderReportTable = (operations) => {
             <td class="text-red-900">-$${category.gastos}</td>
             <td>$${category.ganancias - category.gastos}</td>
             `
-          }
+        }
+
         
     } else{
         showElement("#no-reports")
         hideElement(".reports-table-section")
     }
 }
+
+/* const adjustDate = () => {
+    const date = new Date($("#date").value)
+    
+
+    const day = date.getUTCDate()
+    const month = date.getUTCMonth() + 1
+    const year = date.getUTCFullYear()
+
+    return day + '/' + month + '/' + year;
+} */
 
 const saveOperationInfo = (operationId) => {
     return {
@@ -194,7 +208,7 @@ const editCategory = () => {
         return category // si no se cumple devuelvo lo que no se cambio
     })
     setLocalInfo("categories", editedCategory)
-  }
+}
   
 const editCategoryTable = (id) => {
     hideElement("#table-category")
@@ -204,7 +218,7 @@ const editCategoryTable = (id) => {
     showElement(".edit-category-title")
     $("#btn-category-edit").setAttribute("data-id", id) 
     const categorySelect = getLocalInfo("categories").find((category) => category.id === id)
-    $("#new-category").value = categorySelect.categoryName  // no esta aca el problema, aca me pone el value del id que recibo 
+    $("#new-category").value = categorySelect.categoryName 
 }
 
 const showBalance = (operations) => {
@@ -244,7 +258,6 @@ const totalsByCategory = (operations) => {
     const categories = {}
     operations.forEach(operation => {
         const category = operation.category
-        const amount = operation.amount
   
         if (!categories[category]) {
             categories[category] = {
@@ -255,9 +268,9 @@ const totalsByCategory = (operations) => {
         }
   
         if (operation.type === 'Gasto') {
-            categories[category].gastos += amount
+            categories[category].gastos += operation.amount
         } else if (operation.type === 'Ganancia') {
-            categories[category].ganancias += amount
+            categories[category].ganancias += operation.amount
         }
     })
   
@@ -271,35 +284,111 @@ const totalsByCategory = (operations) => {
 
 const categoryMoreRevenue = (operations) => {
     let acc = 0
-    let nombre = ""
+    let category = ""
     for (const operation of totalsByCategory(operations)) {
         if (operation.ganancias > acc){
             acc = operation.ganancias
-            nombre = operation.category
+            category = operation.category
         }
     }
-    const categorySelected = getLocalInfo("categories").find(cat => cat.id === nombre)
+    const categorySelected = getLocalInfo("categories").find(cat => cat.id === category)
 
-    return [categorySelected.categoryName, acc]
-}  // si no hay categoria tira error
+    return [category, acc] // si no hay tira error
+} // error name category
 
 const categoryMoreSpent = (operations) => {
     let acc = 0
-    let nombre = ""
+    let category = ""
     for (const operation of totalsByCategory(operations)) {
         if (operation.gastos > acc){
             acc = operation.gastos
-            nombre = operation.category
+            category = operation.category
         }
     }
-    const categorySelected = getLocalInfo("categories").find(cat => cat.id === nombre)
+    const categorySelected = getLocalInfo("categories").find(cat => cat.id === category)
     
-    return [categorySelected.categoryName, acc]
-} // si no hay categoria tira error
- 
+    return [category, acc] // si no hay tira error
+} // error name category
+
+const categoryMoreBalance = (operations) => {
+    let acc = 0
+    let category = ""
+    for (const operation of totalsByCategory(operations)) {
+        const total = operation.ganancias - operation.gastos
+        if (total > 0 && total > acc) {
+            acc = total
+            category = operation.category
+        }
+    }
+    const categorySelected = getLocalInfo("categories").find(cat => cat.id === category)
+    
+    return [category, acc] // arreglar
+}
+
+const totalsByMonth = (operations) => {
+    const months = {}
+    operations.forEach(operation => {
+        const date = new Date(operation.date)
+        const month = date.getMonth() + 1
+  
+        if (!months[month]) {
+            months[month] = {
+                month: operation.date,
+                gastos: 0,
+                ganancias: 0
+            }
+        }
+  
+        if (operation.type === 'Gasto') {
+            months[month].gastos += operation.amount
+        } else if (operation.type === 'Ganancia') {
+            months[month].ganancias += operation.amount
+        }
+    })
+  
+    const totals = []
+    for (const month in months) {
+        totals.push(months[month])
+    }
+  
+   return totals
+}
+
+const monthMoreRevenue = (operations) => {
+    let acc = 0
+    let month = ""
+    for (const operation of totalsByMonth(operations)) {
+        if (operation.ganancias > acc){
+            acc = operation.ganancias
+            month = operation.date
+        }
+    }
+
+    return [month, acc]
+} 
+
+const monthMoreSpent = (operations) => {
+    let acc = 0
+    let month = ""
+    for (const operation of totalsByMonth(operations)) {
+        if (operation.gastos > acc){
+            acc = operation.gastos
+            month = operation.date
+        }
+    }
+  
+    return [month, acc] 
+}
+
 // INITIALIZE APP
 
 const initializeApp = () => {
+    
+    const formatDate = new Date().toISOString().split('T')[0]
+
+    $("#date").value = formatDate
+    $(".date").value = formatDate
+    
     setLocalInfo("operations", allOperations)
     renderOperation(allOperations)
     
@@ -389,13 +478,13 @@ const initializeApp = () => {
         showElement(".menu")
         hideElement(".burger-menu")
         showElement(".close-navbar-menu")
-    });
+    })
     
     $(".close-navbar-menu").addEventListener('click', () =>{
         showElement(".burger-menu")
         hideElement(".menu")
         hideElement(".close-navbar-menu")
-    });
+    })
 }
 
 window.addEventListener("load", initializeApp)

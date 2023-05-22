@@ -14,7 +14,9 @@
     <header>
         <!-- Navbar -->
         <nav class="flex justify-between items-center p-2 bg-emerald-400 text-white lg:p-5">
-                <h1 class="text-4xl p-2 font-medium hover:bg-emerald-600"><a href="index.html"><i class="fas fa-wallet mr-2"></i> AhorrADAs</a></h1>
+                <h1 class="text-4xl p-2 font-medium hover:bg-emerald-600">
+                    <a href="index.html"><i class="fas fa-wallet mr-2"></i> AhorrADAs</a>
+                </h1>
                 <button class="burger-menu lg:hidden">
                     <i class="fas fa-bars p-5 hover:bg-emerald-600" id="burger-menu"></i>
                 </button> 
@@ -53,91 +55,91 @@
         <!-- Balance section -->
         <section id="balance">
             <div class="lg:flex">
-            <div class="lg:w-72 mr-5">
-                <!-- Balance -->
-                <article id="balance-article" class="p-4 mt-10 mb-6 bg-slate-50 rounded drop-shadow-lg lg:mt-0">
-                    <h2 class="text-3xl font-bold mb-10 mt-4">Balance</h2>
-                    <p class="text-xl mb-5 flex justify-between">Ganancias<span class="text-green-500 revenue">+$0</span></p>
-                    <p class="text-xl mb-8 flex justify-between">Gastos<span class="text-red-900 spent">-$0</span></p>
-                    <p class="text-2xl flex justify-between">Total<span class="total">$0</span></p>
-                </article>
-            
-                <!-- Filter -->
-                <article class="p-4 mb-6 bg-slate-50 rounded drop-shadow-lg">
-                    <div class="flex justify-between">
-                        <h2 class="text-3xl font-bold mb-4">Filtros</h2>
-                        <a class="text-blue-600 hide-filter">Ocultar filtros</a>
-                        <a class="text-blue-600 show-filter hidden">Mostrar filtros</a>
-                    </div>
-                    <form active="" class="filter-form">
-                        <fieldset class="flex flex-col">
-                            <label for="" class="font-bold">
-                                Tipo
-                            </label>
-                            <select name="" id="" class="p-2 my-2 border-2 rounded" value="Todos">
-                                <option value="Todos">Todos</option>
-                                <option value="Gasto">Gasto</option>
-                                <option value="Ganancia">Ganancia</option>
-                            </select>
-                        </fieldset>
-                        <fieldset class="flex flex-col">
-                            <label for="" class="font-bold">
-                                Categoría
-                            </label>
-                            <select name="category" id="filter-category" class="p-2 my-2 border-2 rounded" value="Todas">
-                                <option value="Todas">Todas</option>
-                            </select>
-                        </fieldset>
-                        <fieldset class="flex flex-col">
-                            <label for="" class="font-bold">
-                                Desde
-                            </label>
-                            <input type="date" class="p-2 my-2 border-2 rounded date">
-                        </fieldset>
-                        <fieldset class="flex flex-col">
-                            <label for="" class="font-bold">
-                                Ordenar por
-                            </label>
-                            <select name="" id="" class="p-2 my-2 border-2 rounded" value="Todos">
-                                <option value="Mas reciente">Mas reciente</option>
-                                <option value="Menos reciente">Menos reciente</option>
-                                <option value="Mayor monto">Mayor monto</option>
-                                <option value="Menor monto">Menor monto</option>
-                                <option value="A/Z">A/Z</option>
-                                <option value="Z/A">Z/A</option>
-                            </select>
-                        </fieldset>
-                    </form>
-                </article>
-            </div>
+                <div class="lg:w-72 mr-5">
+                    <!-- Balance -->
+                    <article id="balance-article" class="p-4 mt-10 mb-6 bg-slate-50 rounded drop-shadow-lg lg:mt-0">
+                        <h2 class="text-3xl font-bold mb-10 mt-4">Balance</h2>
+                        <p class="text-xl mb-5 flex justify-between">Ganancias<span class="text-green-500 revenue">+$0</span></p>
+                        <p class="text-xl mb-8 flex justify-between">Gastos<span class="text-red-900 spent">-$0</span></p>
+                        <p class="text-2xl flex justify-between">Total<span class="total">$0</span></p>
+                    </article>
+                    
+                    <!-- Filter -->
+                    <article class="p-4 mb-6 bg-slate-50 rounded drop-shadow-lg">
+                        <div class="flex justify-between">
+                            <h2 class="text-3xl font-bold mb-4">Filtros</h2>
+                            <a class="text-blue-600 hide-filter">Ocultar filtros</a>
+                            <a class="text-blue-600 show-filter hidden">Mostrar filtros</a>
+                        </div>
+                        <form active="" class="filter-form">
+                            <fieldset class="flex flex-col">
+                                <label for="" class="font-bold">
+                                    Tipo
+                                </label>
+                                <select name="" id="" class="p-2 my-2 border-2 rounded" value="Todos">
+                                    <option value="Todos">Todos</option>
+                                    <option value="Gasto">Gasto</option>
+                                    <option value="Ganancia">Ganancia</option>
+                                </select>
+                            </fieldset>
+                            <fieldset class="flex flex-col">
+                                <label for="" class="font-bold">
+                                    Categoría
+                                </label>
+                                <select name="category" id="filter-category" class="p-2 my-2 border-2 rounded" value="Todas">
+                                    <option value="Todas">Todas</option>
+                                </select>
+                            </fieldset>
+                            <fieldset class="flex flex-col">
+                                <label for="" class="font-bold">
+                                    Desde
+                                </label>
+                                <input type="date" class="p-2 my-2 border-2 rounded date">
+                            </fieldset>
+                            <fieldset class="flex flex-col">
+                                <label for="" class="font-bold">
+                                    Ordenar por
+                                </label>
+                                <select name="" id="" class="p-2 my-2 border-2 rounded" value="Todos">
+                                    <option value="Mas reciente">Mas reciente</option>
+                                    <option value="Menos reciente">Menos reciente</option>
+                                    <option value="Mayor monto">Mayor monto</option>
+                                    <option value="Menor monto">Menor monto</option>
+                                    <option value="A/Z">A/Z</option>
+                                    <option value="Z/A">Z/A</option>
+                                </select>
+                            </fieldset>
+                        </form>
+                    </article>
+                </div>
             
             <!-- Operations -->
-            <article class="p-4 bg-slate-50 rounded drop-shadow-lg lg:w-3/4">
-                <div class="md:flex justify-between">
-                    <h2 class="text-3xl font-bold mb-5">Operaciones</h2>
-                    <button class="h-10 p-2 mb-5 rounded bg-emerald-400 hover:bg-emerald-600" id="add-operation-btn">+ Nueva operacion</button>
-                </div>
-                <div class="flex flex-col items-center text-center" id="no-operations"> 
-                    <img src="./img/wallet.svg" class="mt-10 lg:mt-28 w-96">
-                    <h3 class="text-2xl font-semibold mt-10">Sin resultados</h3>
-                    <p class="text-lg mt-4 mb-32">Cambia los filtros o agrega operaciones</p>
-                </div>
-                <table class="w-full text-center border-separate border-spacing-y-6 table-header">
-                    <thead>
-                        <tr>
-                            <th>Descripción</th>
-                            <th>Categoría</th>
-                            <th>Fecha</th>
-                            <th>Monto</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody class="" id="table-operations">
-                        
-                    </tbody>
-                </table>
-            </article>
-        </div>
+                <article class="p-4 bg-slate-50 rounded drop-shadow-lg lg:w-3/4">
+                    <div class="md:flex justify-between">
+                        <h2 class="text-3xl font-bold mb-5">Operaciones</h2>
+                        <button class="h-10 p-2 mb-5 rounded bg-emerald-400 hover:bg-emerald-600" id="add-operation-btn">+ Nueva operacion</button>
+                    </div>
+                    <div class="flex flex-col items-center text-center" id="no-operations"> 
+                        <img src="./img/wallet.svg" class="mt-10 lg:mt-28 w-96">
+                        <h3 class="text-2xl font-semibold mt-10">Sin resultados</h3>
+                        <p class="text-lg mt-4 mb-32">Cambia los filtros o agrega operaciones</p>
+                    </div>
+                    <table class="w-full text-center border-separate border-spacing-y-6 table-header">
+                        <thead>
+                            <tr>
+                                <th>Descripción</th>
+                                <th>Categoría</th>
+                                <th>Fecha</th>
+                                <th>Monto</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="" id="table-operations">
+                                
+                        </tbody>
+                    </table>
+                </article>
+            </div>
         </section>
 
         <!-- New operation section -->
@@ -175,10 +177,10 @@
                     </select>
                 </fieldset>
                 <fieldset class="flex flex-col">
-                    <label for="" class="font-bold">
+                    <label for="operation-date" class="font-bold">
                         Fecha
                     </label>
-                    <input type="date" name="" class="p-2 my-2 border-2 rounded" id="date">
+                    <input type="date" name="operation-date" id="date" class="p-2 my-2 border-2 rounded date">
                 </fieldset>
                 <fieldset class="flex justify-end mt-8">
                     <button class="py-2 px-4 rounded">Cancelar</button>
@@ -216,6 +218,7 @@
         </section>
 
         <!-- Reports section -->
+        <div class="px-28"> 
         <section class="p-4 mt-10 bg-slate-50 rounded drop-shadow-lg hidden" id="reports">
             <h2 class="text-4xl font-bold mb-10 mt-4">Reportes</h2>
             <div class="flex flex-col items-center text-center mt-28 mb-32" id="no-reports">
@@ -268,6 +271,7 @@
                     </tbody>
             </div>
         </section>
+        </div>
     </main>
     <script src="./js/main.js"></script>
 </body>
