@@ -60,7 +60,7 @@ const renderOperation = (operations) => {
                     </button>
                 </td>
             `  
-        }
+        } 
     } else {
         showElement("#no-operations")
         hideElement(".table-header")
@@ -98,7 +98,7 @@ const renderCategoriesTable = (categories) => {
     }
 }
 
-const renderReportTable = (operations) => {
+/* const renderReportTable = (operations) => {
     cleanContainer(".table-reports")
     if (operations.length){
         hideElement("#no-reports")
@@ -127,7 +127,7 @@ const renderReportTable = (operations) => {
         showElement("#no-reports")
         hideElement(".reports-table-section")
     }
-}
+} */
 
 /* const adjustDate = () => {
     const date = new Date($("#date").value)
@@ -170,6 +170,15 @@ const deleteOperation = (id) => {
     setLocalInfo("operations", currentOperation)
     showBalance(getLocalInfo("operations"))
     renderOperation(currentOperation)
+}
+
+const deleteCategory = (id) => {
+    const currentCategory = getLocalInfo("categories").filter((category) => category.id !== id)
+    const currentOperation = getLocalInfo("operations").filter((cat) => cat.category !== id)
+    setLocalInfo("operations", currentOperation)
+    setLocalInfo("categories", currentCategory)
+    renderOperation(currentOperation)
+    renderCategoriesTable(currentCategory)
 }
 
 const editOperation = () => {
@@ -393,12 +402,12 @@ const initializeApp = () => {
     renderOperation(allOperations)
     
     setLocalInfo("categories", allCategories)
-    renderCategoriesTable(allCategories)
+    renderCategoriesTable(getLocalInfo("categories"))
     renderCategoriesOptions(allCategories)
     
     showBalance(getLocalInfo("operations"))
     
-    renderReportTable(getLocalInfo("operations"))
+    // renderReportTable(getLocalInfo("operations"))
 
     $("#btn-submit").addEventListener("click", (e) => {
         e.preventDefault()
