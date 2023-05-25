@@ -43,13 +43,14 @@ const allCategories = getLocalInfo("categories") || defaultCategories
 const renderOperation = (operations) => {
     cleanContainer("#table-operations")
     if (operations.length) {
+        showElement(".table-header")
         hideElement("#no-operations")
         for (const {id, description, amount, category, date} of operations){
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category)
             $("#table-operations").innerHTML += `
                 <td class="font-bold">${description}</td>
                 <td class="text-emerald-600">${categorySelected.categoryName}</td>
-                <td>${date}</td>
+                <td>${new Date(date).getDate()}/${new Date(date).getMonth() + 1}/${new Date(date).getFullYear()}</td>
                 <td>${amount}</td>
                 <td>
                     <button class="px-2 py-1 rounded text-white bg-green-500 hover:bg-lime-900" onclick="editOperationForm('${id}')">
@@ -98,20 +99,32 @@ const renderCategoriesTable = (categories) => {
     }
 }
 
-/* const renderReportTable = (operations) => {
+/*const renderReportTable = (operations) => {
     cleanContainer(".table-reports")
     if (operations.length){
         hideElement("#no-reports")
         showElement(".table-reports")
-        $(".table-reports").innerHTML += `
-            <td class="text-emerald-600">${categoryMoreRevenue(operations)[0]}</td>
-            <td class="text-green-500">+$${categoryMoreRevenue(operations)[1]}</td>
-            <td class="text-emerald-600">${categoryMoreSpent(operations)[0]}</td>
-            <td class="text-red-900">-$${categoryMoreSpent(operations)[1]}</td>
-            <td class="text-emerald-600">${categoryMoreBalance(operations)[0]}</td>
-            <td>$${categoryMoreBalance(operations)[1]}</td>
-        `
-        
+        for (const category of categoryMoreRevenue(getLocalInfo("operations"))) {
+            const categorySelected = getLocalInfo("categories").find(cat => cat.id === category.category)
+            $(".table-reports").innerHTML += `
+                <td class="text-emerald-600">${categorySelected.categoryName}</td>
+                <td class="text-green-500">+$${category.total}</td>
+            `
+        }
+        for (const category of categoryMoreSpent(getLocalInfo("operations"))) {
+            const categorySelected = getLocalInfo("categories").find(cat => cat.id === category.category)
+            $(".table-reports").innerHTML += `
+                <td class="text-emerald-600">${categorySelected.categoryName}</td>
+                <td class="text-red-900">+$${category.total}</td>
+            `
+        }
+        for (const category of categoryMoreBalance(getLocalInfo("operations"))) {
+            const categorySelected = getLocalInfo("categories").find(cat => cat.id === category.category)
+            $(".table-reports").innerHTML += `
+                <td class="text-emerald-600">${categorySelected.categoryName}</td>
+                <td>+$${category.total}</td>
+            `
+        }
         for (const category of totalsByCategory(getLocalInfo("operations"))) {
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category.category)
             $(".table-reports-category").innerHTML += `
@@ -121,6 +134,8 @@ const renderCategoriesTable = (categories) => {
             <td>$${category.ganancias - category.gastos}</td>
             `
         }
+
+
 
         
     } else{
@@ -147,7 +162,7 @@ const saveOperationInfo = (operationId) => {
         amount: $("#amount").valueAsNumber,
         type: $("#type").value,
         category: $("#form-category").value,
-        date: $("#date").value
+        date: $("#date").value.replace(/-/g, '/')
     }
 }
 
@@ -166,7 +181,7 @@ const sendNewData = (key, callback) => {
 }
 
 const deleteOperation = (id) => {
-    const currentOperation = getLocalInfo("operations").filter((operation) => operation.id !== id) // guardo todos menos ese
+    const currentOperation = getLocalInfo("operations").filter((operation) => operation.id !== id)
     setLocalInfo("operations", currentOperation)
     showBalance(getLocalInfo("operations"))
     renderOperation(currentOperation)
@@ -235,7 +250,7 @@ const showBalance = (operations) => {
     let contador2 = 0
     if (operations.length) { 
         for (const operation of operations) {
-            if (operation.type === "Ganancia") {
+            if (operation.type === "ganancia") {
                 contador += operation.amount
                 $(".revenue").innerText = `+$${contador}`
             } else {
@@ -255,11 +270,11 @@ const showBalance = (operations) => {
         }
     }
     else {
-        $(".total").innerText = `$0`                   // falta que ponga en 0 la ganancia y el gasto
+        $(".total").innerText = `$0`                   
         $(".total").classList.remove("text-green-500")
         $(".total").classList.remove("text-red-900")
     }
-}
+} // arreglar 
 
 // REPORTS SECTION
 
@@ -276,9 +291,9 @@ const totalsByCategory = (operations) => {
             }
         }
   
-        if (operation.type === 'Gasto') {
+        if (operation.type === "gasto") {
             categories[category].gastos += operation.amount
-        } else if (operation.type === 'Ganancia') {
+        } else if (operation.type === "ganancia") {
             categories[category].ganancias += operation.amount
         }
     })
@@ -294,34 +309,47 @@ const totalsByCategory = (operations) => {
 const categoryMoreRevenue = (operations) => {
     let acc = 0
     let category = ""
+    let result = []
     for (const operation of totalsByCategory(operations)) {
         if (operation.ganancias > acc){
             acc = operation.ganancias
             category = operation.category
         }
     }
-    const categorySelected = getLocalInfo("categories").find(cat => cat.id === category)
+    
+    const obj = { 
+        category: category, 
+        total: acc 
+    }
+    result.push(obj)
 
-    return [category, acc] // si no hay tira error
-} // error name category
+    return result
+} 
 
 const categoryMoreSpent = (operations) => {
     let acc = 0
     let category = ""
+    let result = []
     for (const operation of totalsByCategory(operations)) {
         if (operation.gastos > acc){
             acc = operation.gastos
             category = operation.category
         }
     }
-    const categorySelected = getLocalInfo("categories").find(cat => cat.id === category)
     
-    return [category, acc] // si no hay tira error
-} // error name category
+    const obj = { 
+        category: category, 
+        total: acc 
+    }
+    result.push(obj)
+
+    return result
+} 
 
 const categoryMoreBalance = (operations) => {
     let acc = 0
     let category = ""
+    let result = []
     for (const operation of totalsByCategory(operations)) {
         const total = operation.ganancias - operation.gastos
         if (total > 0 && total > acc) {
@@ -329,9 +357,14 @@ const categoryMoreBalance = (operations) => {
             category = operation.category
         }
     }
-    const categorySelected = getLocalInfo("categories").find(cat => cat.id === category)
     
-    return [category, acc] // arreglar
+    const obj = { 
+        category: category, 
+        total: acc 
+    }
+    result.push(obj)
+
+    return result
 }
 
 const totalsByMonth = (operations) => {
@@ -348,9 +381,9 @@ const totalsByMonth = (operations) => {
             }
         }
   
-        if (operation.type === 'Gasto') {
+        if (operation.type === "gasto") {
             months[month].gastos += operation.amount
-        } else if (operation.type === 'Ganancia') {
+        } else if (operation.type === "ganancia") {
             months[month].ganancias += operation.amount
         }
     })
@@ -389,15 +422,49 @@ const monthMoreSpent = (operations) => {
     return [month, acc] 
 }
 
+// FILTERS
+
+const filters = () => {
+    const type = $("#filter-type").value
+    const category = $("#filter-category").value
+    const date = new Date($(".date").value.replace(/-/g, '/'))
+
+    const filterType = getLocalInfo("operations").filter((operation) => {
+        if (type === "todos") {
+            return operation
+        }
+        return type === operation.type
+    })
+
+    const filterCategory = filterType.filter((operation) => {
+        if (category === "todas") {
+            return operation
+        } else {
+            return category === operation.category
+        }
+    })
+
+    const filterDate = filterCategory.filter((operation) => {
+        return new Date(operation.date).getDate() >= date.getDate()
+    })
+
+    const filterS = $("#filter-sort").value
+
+   const filterSort = filterDate.sort((a, b) => {
+        if (filterS === "mas-reciente"){
+            return new Date(b.date).getDate() - new Date(a.date).getDate()
+        } else if (filterS === "menos-reciente") {
+            return new Date(a.date).getDate() - new Date(b.date).getDate()
+        }
+   })
+    
+    return renderOperation(filterSort)
+}
+
+
 // INITIALIZE APP
 
 const initializeApp = () => {
-    
-    const formatDate = new Date().toISOString().split('T')[0]
-
-    $("#date").value = formatDate
-    $(".date").value = formatDate
-    
     setLocalInfo("operations", allOperations)
     renderOperation(allOperations)
     
@@ -407,7 +474,29 @@ const initializeApp = () => {
     
     showBalance(getLocalInfo("operations"))
     
-    // renderReportTable(getLocalInfo("operations"))
+    //renderReportTable(getLocalInfo("operations"))
+
+    const formatDate = new Date().toISOString().split('T')[0]
+
+    $("#date").value = formatDate
+    $(".date").value = formatDate
+
+    $("#filter-type").addEventListener ("change", () => {
+        filters()
+    })
+
+    $("#filter-category").addEventListener ("change", () => {
+        filters()
+    })
+
+    $(".date").addEventListener ("change", () => {
+        filters()
+    })
+
+    $("#filter-sort").addEventListener ("change", () => {
+        filters()
+    })
+
 
     $("#btn-submit").addEventListener("click", (e) => {
         e.preventDefault()
@@ -420,7 +509,7 @@ const initializeApp = () => {
         editOperation()
         hideElement("#operation")
         showElement("#balance")
-        renderOperation(getLocalInfo("operations")) // si no lo pongo tengo que actualizar el html para que aparezca lo que edite 
+        renderOperation(getLocalInfo("operations"))
     })
 
     $("#btn-category-edit").addEventListener("click", (e) => {
