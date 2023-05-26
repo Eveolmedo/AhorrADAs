@@ -99,61 +99,89 @@ const renderCategoriesTable = (categories) => {
     }
 }
 
-/*const renderReportTable = (operations) => {
+const renderReportTable = (operations) => {
     cleanContainer(".table-reports")
     if (operations.length){
         hideElement("#no-reports")
         showElement(".table-reports")
         for (const category of categoryMoreRevenue(getLocalInfo("operations"))) {
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category.category)
-            $(".table-reports").innerHTML += `
-                <td class="text-emerald-600">${categorySelected.categoryName}</td>
-                <td class="text-green-500">+$${category.total}</td>
-            `
+            if (categorySelected) {
+                $(".table-reports").innerHTML += `
+                    <tr>
+                        <th class="">Categoría con mayor ganancia</th>
+                        <td class="text-emerald-600">${categorySelected.categoryName}</td>
+                        <td class="text-green-500">+$${category.total}</td>
+                    <tr>
+                `
+            }
         }
         for (const category of categoryMoreSpent(getLocalInfo("operations"))) {
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category.category)
-            $(".table-reports").innerHTML += `
-                <td class="text-emerald-600">${categorySelected.categoryName}</td>
-                <td class="text-red-900">+$${category.total}</td>
-            `
+            if (categorySelected) {
+                $(".table-reports").innerHTML += `
+                    <tr>
+                        <th>Categoría con mayor gasto</th>
+                        <td class="text-emerald-600">${categorySelected.categoryName}</td>
+                        <td class="text-red-900">-$${category.total}</td>
+                    <tr>
+                `
+            }
         }
         for (const category of categoryMoreBalance(getLocalInfo("operations"))) {
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category.category)
+            if (categorySelected) {
+                $(".table-reports").innerHTML += `
+                    <tr>
+                        <th class="my-4 mb-5">Categoría con mayor balance</th>
+                        <td class="text-emerald-600">${categorySelected.categoryName}</td>
+                        <td>+$${category.total}</td>
+                    <tr>
+                `
+            }
+        }
+        for (const month of monthMoreRevenue(getLocalInfo("operations"))) {
             $(".table-reports").innerHTML += `
-                <td class="text-emerald-600">${categorySelected.categoryName}</td>
-                <td>+$${category.total}</td>
-            `
+                    <tr>
+                        <th class="my-4 mb-5">Mes con mayor ganancia</th>
+                        <td class="text-emerald-600">${month.month}</td>
+                        <td class="text-green-500">+$${month.total}</td>
+                    <tr>
+                `
+        }
+        for (const month of monthMoreSpent(getLocalInfo("operations"))) {
+            $(".table-reports").innerHTML += `
+                    <tr>
+                        <th class="my-4 mb-5">Mes con mayor gasto</th>
+                        <td class="text-emerald-600">${month.month}</td>
+                        <td class="text-red-900">-$${month.total}</td>
+                    <tr>
+                `
         }
         for (const category of totalsByCategory(getLocalInfo("operations"))) {
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category.category)
-            $(".table-reports-category").innerHTML += `
-            <td class="text-emerald-600">${categorySelected.categoryName}</td>
-            <td class="text-green-500">+$${category.ganancias}</td>
-            <td class="text-red-900">-$${category.gastos}</td>
-            <td>$${category.ganancias - category.gastos}</td>
-            `
+            if (categorySelected) {
+                $(".table-reports-category").innerHTML += `
+                <td class="text-emerald-600">${categorySelected.categoryName}</td>
+                <td class="text-green-500">+$${category.ganancias}</td>
+                <td class="text-red-900">-$${category.gastos}</td>
+                <td>$${category.ganancias - category.gastos}</td>
+                `
+            }
         }
-
-
-
-        
+        for (const month of totalsByMonth(getLocalInfo("operations"))) {
+            $(".table-reports-month").innerHTML += `
+                <td>${new Date(month.month).getMonth() + 1}/${new Date(month.month).getFullYear()}</td>
+                <td class="text-green-500">+$${month.ganancias}</td>
+                <td class="text-red-900">-$${month.gastos}</td>
+                <td>$${month.ganancias - month.gastos}</td>
+            `
+        }  
     } else{
         showElement("#no-reports")
         hideElement(".reports-table-section")
     }
-} */
-
-/* const adjustDate = () => {
-    const date = new Date($("#date").value)
-    
-
-    const day = date.getUTCDate()
-    const month = date.getUTCMonth() + 1
-    const year = date.getUTCFullYear()
-
-    return day + '/' + month + '/' + year;
-} */
+}
 
 const saveOperationInfo = (operationId) => {
     return {
@@ -162,7 +190,7 @@ const saveOperationInfo = (operationId) => {
         amount: $("#amount").valueAsNumber,
         type: $("#type").value,
         category: $("#form-category").value,
-        date: $("#date").value.replace(/-/g, '/')
+        date: new Date($("#date").value.replace(/-/g, '/'))
     }
 }
 
@@ -220,7 +248,7 @@ const editOperationForm = (id) => {
     $("#amount").valueAsNumber = operationSelect.amount
     $("#type").value = operationSelect.type
     $("#form-category").value = operationSelect.category
-    $("#date").value = operationSelect.date
+    $("#date").value = new Date(operationSelect.date).toISOString().split('T')[0]
 }
 
 const editCategory = () => {
@@ -371,7 +399,7 @@ const totalsByMonth = (operations) => {
     const months = {}
     operations.forEach(operation => {
         const date = new Date(operation.date)
-        const month = date.getMonth() + 1
+        const month = date.getMonth() + 1 // recibo un 5
   
         if (!months[month]) {
             months[month] = {
@@ -392,34 +420,53 @@ const totalsByMonth = (operations) => {
     for (const month in months) {
         totals.push(months[month])
     }
-  
+
    return totals
 }
+
 
 const monthMoreRevenue = (operations) => {
     let acc = 0
     let month = ""
+    let result = []
     for (const operation of totalsByMonth(operations)) {
         if (operation.ganancias > acc){
             acc = operation.ganancias
-            month = operation.date
+            month = operation.month
         }
     }
 
-    return [month, acc]
+    month = new Date(month).toISOString().split('T')[0]
+
+    const obj = { 
+        month: month.replace(/-/g, '/'), 
+        total: acc 
+    }
+    result.push(obj)
+
+    return result
 } 
 
 const monthMoreSpent = (operations) => {
     let acc = 0
     let month = ""
+    let result = []
     for (const operation of totalsByMonth(operations)) {
         if (operation.gastos > acc){
             acc = operation.gastos
-            month = operation.date
+            month = operation.month
         }
     }
-  
-    return [month, acc] 
+
+    month = new Date(month).toISOString().split('T')[0]
+
+    const obj = { 
+        month: month.replace(/-/g, '/'), 
+        total: acc 
+    }
+    result.push(obj)
+
+    return result
 }
 
 // FILTERS
@@ -428,6 +475,7 @@ const filters = () => {
     const type = $("#filter-type").value
     const category = $("#filter-category").value
     const date = new Date($(".date").value.replace(/-/g, '/'))
+    const filterS = $("#filter-sort").value
 
     const filterType = getLocalInfo("operations").filter((operation) => {
         if (type === "todos") {
@@ -448,13 +496,23 @@ const filters = () => {
         return new Date(operation.date).getDate() >= date.getDate()
     })
 
-    const filterS = $("#filter-sort").value
-
    const filterSort = filterDate.sort((a, b) => {
         if (filterS === "mas-reciente"){
             return new Date(b.date).getDate() - new Date(a.date).getDate()
-        } else if (filterS === "menos-reciente") {
+        } 
+        if (filterS === "menos-reciente") {
             return new Date(a.date).getDate() - new Date(b.date).getDate()
+        }
+        if (filterS === "mayor-monto") {
+            return b.amount - a.amount
+        }
+        if (filterS === "menor-monto") {
+            return a.amount - b.amount
+        }
+        if (filterS === "a-z") {
+            return b.description - a.description
+        } else {
+            return a.description - b.description
         }
    })
     
@@ -474,9 +532,9 @@ const initializeApp = () => {
     
     showBalance(getLocalInfo("operations"))
     
-    //renderReportTable(getLocalInfo("operations"))
+    renderReportTable(getLocalInfo("operations"))
 
-    const formatDate = new Date().toISOString().split('T')[0]
+    const formatDate = new Date().toISOString().split('T')[0]  // devuelve la fecha actual en formato ISO sin la hora ni la zona horaria AAAA-MM-DDTHH:mm:ss.sssZ
 
     $("#date").value = formatDate
     $(".date").value = formatDate
