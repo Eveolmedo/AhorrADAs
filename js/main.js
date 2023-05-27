@@ -273,6 +273,22 @@ const editCategoryTable = (id) => {
     $("#new-category").value = categorySelect.categoryName 
 }
 
+// VALIDATES
+
+const validateForm = () => {
+    const description = $("#description").value.trim()
+
+    if (description == "") {
+        showElement(".description-error")
+    } else {
+        hideElement(".description-error")
+    }
+
+    return description !== ""
+}
+
+// BALANCE SECTION
+
 const showBalance = (operations) => {
     let total = 0
     let cont1 = 0
@@ -520,6 +536,17 @@ const filters = () => {
     return renderOperation(filterSort)
 }
 
+// DATES
+
+const dates = () => {
+    const actualDate = new Date()
+    actualDate.setDate(1)
+    // used the setDate(1) method to set the day to 1 of the month
+    $(".date").value = actualDate.toISOString().split('T')[0]
+    $("#date").value = new Date().toISOString().split('T')[0] 
+    // returns the current date in ISO format without the time and time zone YYYY-MM-DDTHH:mm:ss.sssZ
+}
+
 // INITIALIZE APP
 
 const initializeApp = () => {
@@ -534,10 +561,7 @@ const initializeApp = () => {
 
     renderReportTable(getLocalInfo("operations"))
 
-    const formatDate = new Date().toISOString().split('T')[0]  // devuelve la fecha actual en formato ISO sin la hora ni la zona horaria AAAA-MM-DDTHH:mm:ss.sssZ
-
-    $("#date").value = formatDate
-    $(".date").value = formatDate
+    dates()
 
     $("#filter-type").addEventListener ("change", () => {
         filters()
@@ -557,15 +581,19 @@ const initializeApp = () => {
 
     $("#btn-submit").addEventListener("click", (e) => {
         e.preventDefault()
-        sendNewData("operations", saveOperationInfo)
+        if (validateForm()){
+            sendNewData("operations", saveOperationInfo)
+        }
     })
 
     $("#btn-edit").addEventListener("click", (e) => {
         e.preventDefault()
-        editOperation()
-        hideElement("#operation")
-        showElement("#balance")
-        renderOperation(getLocalInfo("operations"))
+        if (validateForm()){
+            editOperation()
+            hideElement("#operation")
+            showElement("#balance")
+            renderOperation(getLocalInfo("operations"))
+        }
     })
 
     $("#btn-category-edit").addEventListener("click", (e) => {
