@@ -131,13 +131,15 @@ const renderReportTable = (operations) => {
         }
         for (const category of categoryMoreBalance(getLocalInfo("operations"))) {
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category.category)
-            $(".table-reports").innerHTML += `
-                <tr>
-                    <th class="my-4 mb-5">Categoría con mayor balance</th>
-                    <td class="text-emerald-600">${categorySelected.categoryName}</td>
-                    <td>+$${category.total}</td>
-                <tr>
-            `
+            if (categorySelected) {
+                $(".table-reports").innerHTML += `
+                    <tr>
+                        <th class="my-4 mb-5">Categoría con mayor balance</th>
+                        <td class="text-emerald-600">${categorySelected.categoryName}</td>
+                        <td>+$${category.total}</td>
+                    <tr>
+                `
+            }
         }
         for (const month of monthMoreRevenue(getLocalInfo("operations"))) {
             $(".table-reports").innerHTML += `
@@ -503,12 +505,17 @@ const filters = () => {
             return a.amount - b.amount
         }
         if (filterS === "a-z") {
-            return b.description - a.description
-        } else {
-            return a.description - b.description
+            if (a.description.toUpperCase() < b.description.toUpperCase()) {
+                return -1
+            }
+        }
+        else {
+            if (b.description.toUpperCase() < a.description.toUpperCase()) {
+                return -1
+            }
         }
    })
-    
+
     showBalance(filterSort)
     return renderOperation(filterSort)
 }
@@ -524,7 +531,7 @@ const initializeApp = () => {
     renderCategoriesOptions(allCategories)
     
     showBalance(getLocalInfo("operations"))
-    
+
     renderReportTable(getLocalInfo("operations"))
 
     const formatDate = new Date().toISOString().split('T')[0]  // devuelve la fecha actual en formato ISO sin la hora ni la zona horaria AAAA-MM-DDTHH:mm:ss.sssZ
@@ -548,11 +555,9 @@ const initializeApp = () => {
         filters()
     })
 
-
     $("#btn-submit").addEventListener("click", (e) => {
         e.preventDefault()
         sendNewData("operations", saveOperationInfo)
-        // aca agregar gasto o ganancia
     })
 
     $("#btn-edit").addEventListener("click", (e) => {
@@ -582,13 +587,6 @@ const initializeApp = () => {
         renderCategoriesOptions(currentCategories)
     })
     
-    /* $("#button-balance-section").addEventListener("click", () => {
-        showElement($("#balance"))
-        hideElement($("#category-section"))
-        hideElement($("#reports"))                  POR AHORA NO
-        hideElement($("#operation"))
-    }) */
-    
     $("#button-category-section").addEventListener("click", () => {   // seleccionar el del burguer menu tambien!
         showElement("#category-section")
         hideElement("#balance")
@@ -601,6 +599,7 @@ const initializeApp = () => {
         hideElement("#balance")
         hideElement("#category-section")
         hideElement("#operation")
+        renderReportTable(getLocalInfo("operations"))
     })
     
     $(".hide-filter").addEventListener("click", () => {
@@ -617,7 +616,6 @@ const initializeApp = () => {
     
     $("#add-operation-btn").addEventListener("click", () => {
         hideElement("#balance")
-        showElement("#operation")
         showElement("#operation")
         showElement(".new-operation-title")
         hideElement(".edit-operation-title")
