@@ -84,7 +84,7 @@ const renderCategoriesTable = (categories) => {
     cleanContainer("#table-category")
     for (const { categoryName, id } of categories) { 
         $("#table-category").innerHTML += `
-        <tr>
+        <tr class="flex justify-between">
             <td class="text-emerald-600">${categoryName}</td>
             <td>
                 <button class="px-2 py-1 rounded text-white bg-green-500 hover:bg-lime-900" onclick="editCategoryTable('${id}')">
@@ -263,19 +263,17 @@ const editCategoryTable = (id) => {
 }
 
 const showBalance = (operations) => {
-    let contador = 0
-    let contador2 = 0
+    let total = 0
+    let cont1 = 0
+    let cont2 = 0
     if (operations.length) { 
-        for (const operation of operations) {
-            if (operation.type === "ganancia") {
-                contador += operation.amount
-                $(".revenue").innerText = `+$${contador}`
-            } else {
-                contador2 += operation.amount
-                $(".spent").innerText = `-$${contador2}`
-            }
+        for (const operation of totalsByCategory(operations)) {
+            cont1 += operation.ganancias
+            $(".revenue").innerText = `+$${cont1}`
+            cont2 += operation.gastos
+            $(".spent").innerText = `-$${cont2}`
         }
-        const total = contador - contador2
+        total = cont1 - cont2
         if (total > 0){
             $(".total").classList.add("text-green-500")
             $(".total").classList.remove("text-red-900")
@@ -287,11 +285,13 @@ const showBalance = (operations) => {
         }
     }
     else {
-        $(".total").innerText = `$0`                   
+        $(".total").innerText = `$0`     
+        $(".revenue").innerText = `+$0` 
+        $(".spent").innerText = `-$0`               
         $(".total").classList.remove("text-green-500")
         $(".total").classList.remove("text-red-900")
     }
-} // arreglar 
+}
 
 // REPORTS SECTION
 
@@ -504,9 +504,9 @@ const filters = () => {
         }
    })
     
+    showBalance(filterSort)
     return renderOperation(filterSort)
 }
-
 
 // INITIALIZE APP
 
@@ -584,7 +584,7 @@ const initializeApp = () => {
         hideElement($("#operation"))
     }) */
     
-    $("#button-category-section").addEventListener("click", () => {
+    $("#button-category-section").addEventListener("click", () => {   // seleccionar el del burguer menu tambien!
         showElement("#category-section")
         hideElement("#balance")
         hideElement("#reports")
