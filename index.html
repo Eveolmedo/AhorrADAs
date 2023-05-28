@@ -13,17 +13,19 @@
 <body class="bg-gray-100 font-sans text-neutral-700">
     <header>
         <!-- Navbar -->
-        <nav class="flex justify-between items-center p-2 bg-emerald-400 text-white lg:p-5">
-                <h1 class="text-4xl p-2 font-medium hover:bg-emerald-600">
-                    <a href="index.html"><i class="fas fa-wallet mr-2"></i> AhorrADAs</a>
-                </h1>
-                <button class="burger-menu lg:hidden">
-                    <i class="fas fa-bars p-5 hover:bg-emerald-600" id="burger-menu"></i>
-                </button> 
-                <button class="close-navbar-menu hidden lg:hidden">
-                    <i class="fa-solid fa-xmark p-5 hover:bg-emerald-600"></i>
-                </button>
-                <ul class="hidden lg:flex justify-between" id="navbar-menu">
+        <nav class="flex justify-between items-center bg-emerald-400 text-white lg:p-5">
+                <div class="w-full flex justify-between">
+                    <h1 class="text-4xl p-2 font-medium hover:bg-emerald-600">
+                        <a href="index.html"><i class="fas fa-wallet mr-2"></i> AhorrADAs</a>
+                    </h1>
+                    <button class="burger-menu lg:hidden">
+                        <i class="fas fa-bars p-4 hover:bg-emerald-600" id="burger-menu"></i>
+                    </button> 
+                    <button class="close-navbar-menu hidden lg:hidden">
+                        <i class="fa-solid fa-xmark p-4 hover:bg-emerald-600"></i>
+                    </button>
+                </div>
+                <ul class="hidden lg:flex justify-around w-1/3" id="navbar-menu">
                     <li class="p-2 hover:bg-emerald-600 rounded" id="button-balance-section">
                         <a href="index.html"><i class="fas fa-chart-line mr-2"></i>Balance</a>
                     </li>
@@ -51,11 +53,11 @@
             </nav>
         </div>
     </header>
-    <main class="w-full lg:px-44 pt-10">
+    <main class="w-full lg:px-32 pt-10 xl:px-44">
         <!-- Balance section -->
-        <section id="balance">
+        <section class="p-4" id="balance">
             <div class="lg:flex">
-                <div class="lg:w-72 mr-5">
+                <div class="lg:w-72 lg:mr-5">
                     <!-- Balance -->
                     <article id="balance-article" class="p-4 mt-10 mb-6 bg-slate-50 rounded drop-shadow-lg lg:mt-0">
                         <h2 class="text-3xl font-bold mb-10 mt-4">Balance</h2>
@@ -112,9 +114,9 @@
                         </form>
                     </article>
                 </div>
-            
-            <!-- Operations -->
-                <article class="p-4 bg-slate-50 rounded drop-shadow-lg lg:w-3/4">
+
+                <!-- Operations -->
+                <article class="p-4 bg-slate-50 rounded drop-shadow-lg lg:w-3/4 lg:p-6">
                     <div class="md:flex justify-between">
                         <h2 class="text-3xl font-bold mb-5">Operaciones</h2>
                         <button class="h-10 p-2 mb-5 rounded bg-emerald-400 hover:bg-emerald-600" id="add-operation-btn">+ Nueva operacion</button>
@@ -124,9 +126,9 @@
                         <h3 class="text-2xl font-semibold mt-10">Sin resultados</h3>
                         <p class="text-lg mt-4 mb-32">Cambia los filtros o agrega operaciones</p>
                     </div>
-                    <table class="w-full text-center border-separate border-spacing-y-6 table-header">
+                    <table class="w-full table-header md:text-center border-separate border-spacing-y-6">
                         <thead>
-                            <tr>
+                            <tr class="hidden md:table-row">
                                 <th>Descripción</th>
                                 <th>Categoría</th>
                                 <th>Fecha</th>
@@ -134,7 +136,7 @@
                                 <th>Acciones</th>
                             </tr>
                         </thead>
-                        <tbody class="" id="table-operations">
+                        <tbody class="p-2" id="table-operations">
                                 
                         </tbody>
                     </table>
@@ -143,56 +145,58 @@
         </section>
 
         <!-- New operation section -->
-        <section class=" p-4 mt-10 bg-slate-50 rounded drop-shadow-lg hidden" id="operation">
-            <h2 class="text-4xl font-bold mb-10 mt-4 new-operation-title">Nueva Operación</h2>
-            <h2 class="text-4xl font-bold mb-10 mt-4 hidden edit-operation-title">Editar Operación</h2>
-            <form action="">
-                <fieldset class="flex flex-col">
-                    <label for="description" class="font-bold">
-                        Descripción
-                    </label>
-                    <input type="text" name="" id="description" class="p-2 my-2 border-2 rounded">
-                    <p class="m-2 text-red-800 hidden description-error"><i class="fa-sharp fa-solid fa-circle-exclamation mr-2"></i>Campo obligatorio</p>    
-                </fieldset>
-                <fieldset class="flex flex-col">
-                    <label for="" class="font-bold">
-                        Monto
-                    </label>
-                    <input type="number" name="" id="amount" value="0" class="p-2 my-2 border-2 rounded">
-                </fieldset>
-                <fieldset class="flex flex-col">
-                    <label for="" class="font-bold">
-                        Tipo
-                    </label>
-                    <select name="" id="type" class="p-2 my-2 border-2 rounded">
-                        <option value="gasto">Gasto</option>
-                        <option value="ganancia">Ganancia</option>
-                    </select>
-                </fieldset>
-                <fieldset class="flex flex-col">
-                    <label for="" class="font-bold">
-                        Categoría
-                    </label>
-                    <select name="category" id="form-category" class="p-2 my-2 border-2 rounded">
-                        
-                    </select>
-                </fieldset>
-                <fieldset class="flex flex-col">
-                    <label for="operation-date" class="font-bold">
-                        Fecha
-                    </label>
-                    <input type="date" name="operation-date" id="date" class="p-2 my-2 border-2 rounded date">
-                </fieldset>
-                <fieldset class="flex justify-end mt-8">
-                    <button class="py-2 px-4 rounded">Cancelar</button>
-                    <button class="py-2 px-4 text-white bg-green-500 rounded" id="btn-submit">Agregar</button>
-                    <button class="py-2 px-4 text-white bg-green-500 rounded hidden" id="btn-edit">Editar</button>
-                </fieldset>
-            </form>
+        <section class="p-4 lg:px-28">
+            <div class="p-4 mt-10 bg-slate-50 rounded drop-shadow-lg hidden" id="operation">
+                <h2 class="text-3xl font-bold mb-10 mt-4 new-operation-title">Nueva Operación</h2>
+                <h2 class="text-3xl font-bold mb-10 mt-4 hidden edit-operation-title">Editar Operación</h2>
+                <form action="">
+                    <fieldset class="flex flex-col">
+                        <label for="description" class="font-bold">
+                            Descripción
+                        </label>
+                        <input type="text" name="" id="description" class="p-2 my-2 border-2 rounded">
+                        <p class="m-2 text-red-800 hidden description-error"><i class="fa-sharp fa-solid fa-circle-exclamation mr-2"></i>Campo obligatorio</p>    
+                    </fieldset>
+                    <fieldset class="flex flex-col">
+                        <label for="" class="font-bold">
+                            Monto
+                        </label>
+                        <input type="number" name="" id="amount" value="0" class="p-2 my-2 border-2 rounded">
+                    </fieldset>
+                    <fieldset class="flex flex-col">
+                        <label for="" class="font-bold">
+                            Tipo
+                        </label>
+                        <select name="" id="type" class="p-2 my-2 border-2 rounded">
+                            <option value="gasto">Gasto</option>
+                            <option value="ganancia">Ganancia</option>
+                        </select>
+                    </fieldset>
+                    <fieldset class="flex flex-col">
+                        <label for="" class="font-bold">
+                            Categoría
+                        </label>
+                        <select name="category" id="form-category" class="p-2 my-2 border-2 rounded">
+                            
+                        </select>
+                    </fieldset>
+                    <fieldset class="flex flex-col">
+                        <label for="operation-date" class="font-bold">
+                            Fecha
+                        </label>
+                        <input type="date" name="operation-date" id="date" class="p-2 my-2 border-2 rounded date">
+                    </fieldset>
+                    <fieldset class="flex justify-end mt-8">
+                        <button class="py-2 px-4 rounded">Cancelar</button>
+                        <button class="py-2 px-4 text-white bg-green-500 rounded" id="btn-submit">Agregar</button>
+                        <button class="py-2 px-4 text-white bg-green-500 rounded hidden" id="btn-edit">Editar</button>
+                    </fieldset>
+                </form>
+            </div>
         </section>
 
         <!-- Category section -->
-        <section class="lg:px-28">
+        <section class="p-5 lg:px-28">
             <div class="p-8 mt-10 bg-slate-50 rounded drop-shadow-lg hidden" id="category-section">
                 <h2 class="text-4xl font-bold mb-10 mt-4 category-title">Categorías</h2>
                 <h2 class="text-4xl font-bold mb-10 mt-4 edit-category-title hidden">Editar categoría</h2>
@@ -219,8 +223,8 @@
         </section>
 
         <!-- Reports section -->
-        <div class="lg:px-28"> 
-            <section class="p-8 mt-10 bg-slate-50 rounded drop-shadow-lg hidden" id="reports">
+        <section class="lg:px-28"> 
+            <div class="p-8 mt-10 bg-slate-50 rounded drop-shadow-lg hidden" id="reports">
                 <h2 class="text-4xl font-bold mb-10 mt-4">Reportes</h2>
                 <div class="flex flex-col items-center text-center mt-28 mb-32" id="no-reports">
                     <img src="./img/chart.svg" class="w-96">
@@ -262,8 +266,8 @@
                             
                         </tbody>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
     </main>
     <script src="./js/main.js"></script>
 </body>

@@ -48,10 +48,13 @@ const renderOperation = (operations) => {
         for (const {id, description, amount, category, date} of operations){
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category)
             $("#table-operations").innerHTML += `
+            <tr class="md:hidden">
                 <td class="font-bold">${description}</td>
+            </tr>
+                <td class="hidden md:block font-bold">${description}</td>
                 <td class="text-emerald-600">${categorySelected.categoryName}</td>
                 <td>${new Date(date).getDate()}/${new Date(date).getMonth() + 1}/${new Date(date).getFullYear()}</td>
-                <td class="table-amount">${amount}</td>
+                <td>${amount}</td>
                 <td>
                     <button class="px-2 py-1 rounded text-white bg-green-500 hover:bg-lime-900" onclick="editOperationForm('${id}')">
                         <i class="fa-solid fa-pencil"></i>
@@ -60,6 +63,7 @@ const renderOperation = (operations) => {
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 </td>
+            </tr>
             `  
         } 
     } else {
