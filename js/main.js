@@ -55,8 +55,6 @@ const allCategories = getLocalInfo("categories") || defaultCategories
 
 // TABLES
 
-
-
 const renderOperation = (operations) => {
     cleanContainer("#table-operations")
     if (operations.length) {
@@ -90,8 +88,6 @@ const renderOperation = (operations) => {
         hideElements([".table-header"])
     }
 }
-
-
 
 const renderCategoriesOptions = (categories) => {
     cleanContainer("#form-category")
@@ -269,7 +265,7 @@ const editOperation = () => {
 const editOperationForm = (id) => {
     hideElements(["#balance", "#btn-submit", ".new-operation-title"])
     showElements(["#operation", "#btn-edit", ".edit-operation-title"])
-    $("#btn-edit").setAttribute("data-id", id)  // paso el id del elemento al boton de edit
+    $("#btn-edit").setAttribute("data-id", id) 
     const operationSelect = getLocalInfo("operations").find((operation) => operation.id === id)
     $("#description").value = operationSelect.description
     $("#amount").valueAsNumber = operationSelect.amount
@@ -290,8 +286,8 @@ const editCategory = () => {
 }
   
 const editCategoryTable = (id) => {
-    hideElements(["#table-category", "#btn-submit-category", ".category-title"])
-    showElements([".btns-edit-category", ".edit-category-title"])
+    hideElements(["#table-category", "#btn-submit-category", ".category-title", "#edit-category"])
+    showElements([".btns-edit-category", ".edit-category-title", "#new-category"])
     $("#btn-category-edit").setAttribute("data-id", id) 
     const categorySelect = getLocalInfo("categories").find((category) => category.id === id)
     $("#new-category").value = categorySelect.categoryName 
@@ -309,6 +305,18 @@ const validateForm = () => {
     }
 
     return description !== ""
+}
+
+const validateCategory = () => {
+    const category = $("#new-category").value.trim()
+
+    if (category == "") {
+        showElements([".category-error"])
+    } else {
+        hideElements([".category-error"])
+    }
+
+    return category !== ""
 }
 
 // BALANCE SECTION
@@ -574,10 +582,12 @@ const initializeApp = () => {
 
     $("#btn-submit-category").addEventListener("click", (e) => {
         e.preventDefault()
-        sendNewData("categories", saveCategoryInfo)
-        const currentCategories = getLocalInfo("categories")
-        renderCategoriesTable(currentCategories)
-        renderCategoriesOptions(currentCategories)
+        if (validateCategory()) {
+            sendNewData("categories", saveCategoryInfo)
+            const currentCategories = getLocalInfo("categories")
+            renderCategoriesTable(currentCategories)
+            renderCategoriesOptions(currentCategories)
+        }
     })
 
     $("#btn-edit").addEventListener("click", (e) => {
@@ -592,10 +602,12 @@ const initializeApp = () => {
 
     $("#btn-category-edit").addEventListener("click", (e) => {
         e.preventDefault()
-        editCategory()
-        showElements(["#table-category", ".category-title", "#btn-submit-category"])
-        hideElements([".btns-edit-category", ".edit-category-title"])
-        renderCategoriesTable(allCategories)
+        if (validateCategory()) {
+            editCategory()
+            showElements(["#table-category", "#btn-submit-category", ".category-title", "#edit-category"])
+            hideElements([".btns-edit-category", ".edit-category-title", "#new-category"])
+            renderCategoriesTable(getLocalInfo("categories"))
+        }
     })
     
     const buttonsCategory = $$(".btn-category-section")

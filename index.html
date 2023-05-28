@@ -137,7 +137,6 @@
                             </tr>
                         </thead>
                         <tbody class="p-2" id="table-operations">
-                            <td class="amount-table"></td>
                             <!-- Here we will render operations from localstorage -->
                         </tbody>
                     </table>
@@ -207,8 +206,10 @@
                     </label>
                     <fieldset class="flex mb-4">
                         <input type="text" class="w-full mr-2 border-2 p-1 rounded" id="new-category">
+                        <input type="text" class="w-full mr-2 border-2 p-1 rounded hidden" id="edit-category">
                         <button class="py-2 px-4 text-white bg-green-500 rounded" id="btn-submit-category">Agregar</button>
                     </fieldset>
+                    <p class="text-red-800 hidden category-error"><i class="fa-sharp fa-solid fa-circle-exclamation mr-2"></i>Campo obligatorio</p>
                     <fieldset class="flex justify-end mt-8 btns-edit-category hidden">
                         <button class="py-2 px-4 rounded">Cancelar</button>
                         <button class="py-2 px-4 text-white bg-green-500 rounded" id="btn-category-edit">Editar</button>
