@@ -26,13 +26,13 @@
                     </button>
                 </div>
                 <ul class="hidden lg:flex justify-around w-1/3" id="navbar-menu">
-                    <li class="p-2 hover:bg-emerald-600 rounded" id="button-balance-section">
+                    <li class="p-2 hover:bg-emerald-600 rounded">
                         <a href="index.html"><i class="fas fa-chart-line mr-2"></i>Balance</a>
                     </li>
-                    <li class="p-2 hover:bg-emerald-600 rounded" id="button-category-section">
+                    <li class="p-2 hover:bg-emerald-600 rounded btn-category-section">
                         <a><i class="fas fa-tag mr-2"></i>Categorías</a>
                     </li>
-                    <li class="p-2 hover:bg-emerald-600 rounded" id="button-reports-section">
+                    <li class="p-2 hover:bg-emerald-600 rounded btn-reports-section">
                         <a><i class="fas fa-chart-pie mr-2"></i>Reportes</a>
                     </li>
                 </ul>
@@ -40,13 +40,13 @@
         <div class="menu-container bg-slate-50 drop-shadow-lg lg:hidden">
             <nav class="menu p-2 hidden">
               <ul>
-                <li class="p-2">
-                    <a href="#"><i class="fas fa-chart-line mr-2"></i>Balance</a>
+                <li class="p-2 hover:bg-emerald-600">
+                    <a href="index.html"><i class="fas fa-chart-line mr-2"></i>Balance</a>
                 </li>
-                <li class="p-2">
-                    <a href="#"><i class="fas fa-tag mr-2"></i>Categorías</a>
+                <li class="p-2 btn-category-section">
+                    <a><i class="fas fa-tag mr-2"></i>Categorías</a>
                 </li>
-                <li class="p-2">
+                <li class="p-2 btn-reports-section">
                     <a href="#"><i class="fas fa-chart-pie mr-2"></i>Reportes</a>
                 </li>
               </ul>
@@ -137,7 +137,7 @@
                             </tr>
                         </thead>
                         <tbody class="p-2" id="table-operations">
-                                
+                            <!-- Here we will render operations from localstorage -->
                         </tbody>
                     </table>
                 </article>
@@ -196,8 +196,8 @@
         </section>
 
         <!-- Category section -->
-        <section class="p-5 lg:px-28">
-            <div class="p-8 mt-10 bg-slate-50 rounded drop-shadow-lg hidden" id="category-section">
+        <section class="p-5 hidden lg:px-28" id="category-section">
+            <div class="p-8 mt-10 bg-slate-50 rounded drop-shadow-lg">
                 <h2 class="text-4xl font-bold mb-10 mt-4 category-title">Categorías</h2>
                 <h2 class="text-4xl font-bold mb-10 mt-4 edit-category-title hidden">Editar categoría</h2>
                 <fieldset class="flex flex-col">
@@ -217,6 +217,7 @@
                 <!-- Category Table -->
                 <table class="w-full text-left border-separate border-spacing-y-4" id="table-category">
                     <tbody>
+                        <!-- Here we will render categories from localstorage or the default ones -->
                     </tbody>
                 </table>
             </div>
@@ -235,7 +236,7 @@
                     <h2 class="text-2xl font-bold mt-4 mb-8">Resumen</h2>
                     <table class="w-full text-left border-separate border-spacing-y-4 mb-20">      
                         <tbody class="table-reports">
-                        
+                    <!-- Here I generate my report table based on the data of the operations fetched from local storage -->
                         </tbody>
                     </table>
                     <h2 class="text-2xl font-bold mb-5 mt-4">Totales por categorías</h2>
@@ -249,7 +250,7 @@
                             </tr>
                         </thead>
                         <tbody class="table-reports-category">
-                            
+                    <!-- Here I generate my report table based on the data of the operations fetched from local storage -->        
                         </tbody>
                     </table>
                     <h2 class="text-2xl font-bold mb-5 mt-4">Totales por mes</h2>
@@ -263,7 +264,7 @@
                             </tr>
                         </thead>
                         <tbody class="table-reports-month">
-                            
+                    <!-- Here I generate my report table based on the data of the operations fetched from local storage -->        
                         </tbody>
                 </div>
             </div>

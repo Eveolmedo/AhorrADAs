@@ -1,14 +1,26 @@
 const $ = (selector) => document.querySelector(selector)
+const $$ = (selector) => document.querySelectorAll(selector)
 
-const showElement = (selector) => $(selector).classList.remove("hidden")
-const hideElement = (selector) => $(selector).classList.add("hidden")
+// Show or hide handlers
+const showElements = (selectors) => {
+    for (const selector of selectors) {
+        $(selector).classList.remove("hidden")
+    }
+}
+const hideElements = (selectors) => {
+    for (const selector of selectors) {
+        $(selector).classList.add("hidden")
+    }
+}
 
 const cleanContainer = (selector) => $(selector).innerHTML = ""
 
+// Random id generator
 const randomId = () => self.crypto.randomUUID()
 
-const getLocalInfo = (key) => JSON.parse(localStorage.getItem(key))  // agarra info del local
-const setLocalInfo = (key, array) => localStorage.setItem(key, JSON.stringify(array))  // envia info al local
+// LocalStorage Handlers
+const getLocalInfo = (key) => JSON.parse(localStorage.getItem(key))
+const setLocalInfo = (key, array) => localStorage.setItem(key, JSON.stringify(array))
 
 const defaultCategories = [
     {
@@ -37,14 +49,17 @@ const defaultCategories = [
     }
 ]
 
-const allOperations = getLocalInfo("operations") || []   // ejecuta lo que hay en el local en la key operaciones o si no hay nada un array vacio
+// LocalStorage keys
+const allOperations = getLocalInfo("operations") || [] 
 const allCategories = getLocalInfo("categories") || defaultCategories
+
+// TABLES
 
 const renderOperation = (operations) => {
     cleanContainer("#table-operations")
     if (operations.length) {
-        showElement(".table-header")
-        hideElement("#no-operations")
+        showElements([".table-header"])
+        hideElements(["#no-operations"])
         for (const {id, description, amount, category, date} of operations){
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category)
             $("#table-operations").innerHTML += `
@@ -67,8 +82,8 @@ const renderOperation = (operations) => {
             `  
         } 
     } else {
-        showElement("#no-operations")
-        hideElement(".table-header")
+        showElements(["#no-operations"])
+        hideElements([".table-header"])
     }
 }
 
@@ -111,8 +126,8 @@ const renderReportTable = (operations) => {
     cleanContainer(".table-reports-category")
     cleanContainer(".table-reports-month") 
     if (revenue(operations).length && expense(operations).length) {
-        hideElement("#no-reports")
-        showElement(".table-reports")
+        hideElements(["#no-reports"])
+        showElements([".reports-table-section"])
         for (const category of categoryMoreRevenue(getLocalInfo("operations"))) {
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category.category)
             $(".table-reports").innerHTML += `
@@ -181,10 +196,12 @@ const renderReportTable = (operations) => {
             `
         }  
     } else {
-        showElement("#no-reports")
-        hideElement(".reports-table-section")
+        showElements(["#no-reports"])
+        hideElements([".reports-table-section"])
     }
 }
+
+// SAVE INFO
 
 const saveOperationInfo = (operationId) => {
     return {
@@ -205,11 +222,13 @@ const saveCategoryInfo = (categoryId) => {
 }
 
 const sendNewData = (key, callback) => {
-    const currentData = getLocalInfo(key) // agarro las operaciones que tengo en el local actualmente
-    const newData = callback() // guardo la informacion que puso el usuario
-    currentData.push(newData) // accedo a lo que esta guardado en el local y agrego la nueva info
-    setLocalInfo(key, currentData) // mando la nueva info al local en la key operations
+    const currentData = getLocalInfo(key) 
+    const newData = callback() 
+    currentData.push(newData) 
+    setLocalInfo(key, currentData) 
 }
+
+// DELETE BUTTONS
 
 const deleteOperation = (id) => {
     const currentOperation = getLocalInfo("operations").filter((operation) => operation.id !== id)
@@ -228,6 +247,8 @@ const deleteCategory = (id) => {
     renderReportTable(currentOperation)
 }
 
+// EDIT BUTTONS
+
 const editOperation = () => {
     const operationId = $("#btn-edit").getAttribute("data-id")
     const editedOperation = getLocalInfo("operations").map((operation) => {
@@ -240,12 +261,8 @@ const editOperation = () => {
 }
 
 const editOperationForm = (id) => {
-    hideElement("#balance")
-    showElement("#operation")
-    hideElement("#btn-submit")
-    showElement("#btn-edit")
-    hideElement(".new-operation-title")
-    showElement(".edit-operation-title")
+    hideElements(["#balance", "#btn-submit", ".new-operation-title"])
+    showElements(["#operation", "#btn-edit", ".edit-operation-title"])
     $("#btn-edit").setAttribute("data-id", id)  // paso el id del elemento al boton de edit
     const operationSelect = getLocalInfo("operations").find((operation) => operation.id === id)
     $("#description").value = operationSelect.description
@@ -267,11 +284,8 @@ const editCategory = () => {
 }
   
 const editCategoryTable = (id) => {
-    hideElement("#table-category")
-    hideElement("#btn-submit-category")
-    hideElement(".category-title")
-    showElement(".btns-edit-category")
-    showElement(".edit-category-title")
+    hideElements(["#table-category", "#btn-submit-category", ".category-title"])
+    showElements([".btns-edit-category", ".edit-category-title"])
     $("#btn-category-edit").setAttribute("data-id", id) 
     const categorySelect = getLocalInfo("categories").find((category) => category.id === id)
     $("#new-category").value = categorySelect.categoryName 
@@ -283,9 +297,9 @@ const validateForm = () => {
     const description = $("#description").value.trim()
 
     if (description == "") {
-        showElement(".description-error")
+        showElements([".description-error"])
     } else {
-        hideElement(".description-error")
+        hideElements([".description-error"])
     }
 
     return description !== ""
@@ -554,19 +568,25 @@ const dates = () => {
 // INITIALIZE APP
 
 const initializeApp = () => {
+    // Operations
     setLocalInfo("operations", allOperations)
     renderOperation(allOperations)
     
+    // Categories
     setLocalInfo("categories", allCategories)
     renderCategoriesTable(getLocalInfo("categories"))
     renderCategoriesOptions(allCategories)
     
-    showBalance(getLocalInfo("operations"))
+    // Balance
+    showBalance(allOperations)
 
-    renderReportTable(getLocalInfo("operations"))
+    // Reports
+    renderReportTable(allOperations)
 
+    // Dates in inputs
     dates()
 
+    // Buttons 
     $("#filter-type").addEventListener ("change", () => {
         filters()
     })
@@ -594,22 +614,19 @@ const initializeApp = () => {
         e.preventDefault()
         if (validateForm()){
             editOperation()
-            hideElement("#operation")
-            showElement("#balance")
-            renderOperation(getLocalInfo("operations"))
+            hideElements(["#operation"])
+            showElements(["#balance"])
+            renderOperation(allOperations)
         }
     })
 
     $("#btn-category-edit").addEventListener("click", (e) => {
         e.preventDefault()
         editCategory()
-        hideElement(".btns-edit-category")
-        hideElement(".edit-category-title")
-        showElement("#table-category")
-        showElement("#btn-submit-category")
-        showElement(".category-title")
-        renderCategoriesTable(getLocalInfo("categories"))
-      })
+        showElements(["#table-category", ".category-title", "#btn-submit-category"])
+        hideElements([".btns-edit-category", ".edit-category-title"])
+        renderCategoriesTable(allCategories)
+    })
     
     $("#btn-submit-category").addEventListener("click", (e) => {
         e.preventDefault()
@@ -618,51 +635,48 @@ const initializeApp = () => {
         renderCategoriesTable(currentCategories)
         renderCategoriesOptions(currentCategories)
     })
-    
-    $("#button-category-section").addEventListener("click", () => {   // seleccionar el del burguer menu tambien!
-        showElement("#category-section")
-        hideElement("#balance")
-        hideElement("#reports")
-        hideElement("#operation")
-    })
-    
-    $("#button-reports-section").addEventListener("click", () => {
-        showElement("#reports")
-        hideElement("#balance")
-        hideElement("#category-section")
-        hideElement("#operation")
-        renderReportTable(getLocalInfo("operations"))
-    })
+
+    const buttonsCategory = $$(".btn-category-section")
+    for (const button of buttonsCategory) {
+        button.addEventListener("click", () => { 
+            showElements(["#category-section"])
+            hideElements(["#balance", "#reports", "#operation"])
+        })
+    }
+
+    const buttonsReports = $$(".btn-reports-section")
+    for (const button of buttonsReports) {
+        button.addEventListener("click", () => {
+            showElements(["#reports"])
+            hideElements(["#balance", "#category-section", "#operation"])
+            renderOperation(getLocalInfo("operations"))
+            renderReportTable(getLocalInfo("operations"))
+        })
+    }
     
     $(".hide-filter").addEventListener("click", () => {
-        hideElement(".filter-form")
-        hideElement(".hide-filter")
-        showElement(".show-filter")
+        hideElements([".filter-form", ".hide-filter"])
+        showElements([".show-filter"])
     })
     
     $(".show-filter").addEventListener("click", () => {
-        showElement(".filter-form")
-        showElement(".hide-filter")
-        hideElement(".show-filter")
+        showElements([".filter-form", ".hide-filter"])
+        hideElements([".show-filter"])
     })
     
     $("#add-operation-btn").addEventListener("click", () => {
-        hideElement("#balance")
-        showElement("#operation")
-        showElement(".new-operation-title")
-        hideElement(".edit-operation-title")
+        hideElements(["#balance", ".edit-operation-title"])
+        showElements(["#operation", ".new-operation-title"])
     })
     
     $(".burger-menu").addEventListener('click', () =>{
-        showElement(".menu")
-        hideElement(".burger-menu")
-        showElement(".close-navbar-menu")
+        showElements([".menu", ".close-navbar-menu"])
+        hideElements([".burger-menu"])
     })
     
     $(".close-navbar-menu").addEventListener('click', () =>{
-        showElement(".burger-menu")
-        hideElement(".menu")
-        hideElement(".close-navbar-menu")
+        showElements([".burger-menu"])
+        hideElements([".menu", ".close-navbar-menu"])
     })
 }
 
