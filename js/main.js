@@ -586,6 +586,13 @@ const initializeApp = () => {
         showElements(["#operation", ".new-operation-title"])
     })
 
+    $("#amount").addEventListener("input", (e) => {
+        const value = e.target.valueAsNumber
+        if (isNaN(value)) {
+            $("#amount").value = ""
+        }
+    })
+
     $("#btn-submit-category").addEventListener("click", (e) => {
         e.preventDefault()
         if (validateCategory()) {
