@@ -323,16 +323,17 @@ const validateCategory = () => {
 
 const showBalance = (operations) => {
     let total = 0
-    let cont1 = 0
-    let cont2 = 0
+    let revenue = 0
+    let spent = 0
     if (operations.length) { 
         for (const operation of totalsByCategory(operations)) {
-            cont1 += operation.ganancias
-            $(".revenue").innerText = `+$${cont1}`
-            cont2 += operation.gastos
-            $(".spent").innerText = `-$${cont2}`
+            revenue += operation.ganancias
+            $(".revenue").innerText = `+$${revenue}`
+            spent += operation.gastos
+            $(".spent").innerText = `-$${spent}`
         }
-        total = cont1 - cont2
+
+        total = revenue - spent
         if (total > 0){
             $(".total").classList.add("text-green-500")
             $(".total").classList.remove("text-red-900")
@@ -545,6 +546,12 @@ const dates = () => {
     // returns the current date in ISO format without the time and time zone YYYY-MM-DDTHH:mm:ss.sssZ
 }
 
+const clearInputs = () => {
+    $("#description").value = ""
+    $("#amount").valueAsNumber = 0
+    $("#date").value = new Date().toISOString().split('T')[0]
+}
+
 // INITIALIZE APP
 
 const initializeApp = () => {
@@ -572,6 +579,9 @@ const initializeApp = () => {
         e.preventDefault()
         if (validateForm()){
             sendNewData("operations", saveOperationInfo)
+            showElements([".operation-success"])
+            clearInputs()
+            setTimeout(() => $(".operation-success").classList.add("hidden"), 1500)
         }
     })
 
@@ -638,21 +648,13 @@ const initializeApp = () => {
         hideElements([".show-filter"])
     })
 
-    $("#filter-type").addEventListener ("change", () => {
-        filters()
-    })
+    $("#filter-type").addEventListener ("change", filters)
 
-    $("#filter-category").addEventListener ("change", () => {
-        filters()
-    })
+    $("#filter-category").addEventListener ("change", filters)
 
-    $(".date").addEventListener ("change", () => {
-        filters()
-    })
+    $(".date").addEventListener ("change", filters)
 
-    $("#filter-sort").addEventListener ("change", () => {
-        filters()
-    })
+    $("#filter-sort").addEventListener ("change", filters)
     
     $(".burger-menu").addEventListener('click', () =>{
         showElements([".menu", ".close-navbar-menu"])

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="crossorigin="anonymous"referrerpolicy="no-referrer"/>
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>">
     <title>AhorrADAs</title>
 </head>
 <body class="bg-gray-100 font-sans text-neutral-700">
@@ -191,6 +192,7 @@
                         <button class="py-2 px-4 text-white bg-green-500 rounded" id="btn-submit">Agregar</button>
                         <button class="py-2 px-4 text-white bg-green-500 rounded hidden" id="btn-edit">Editar</button>
                     </fieldset>
+                    <p class="text-right mt-2 text-green-800 hidden operation-success">Operación agregada con éxito<i class="fa-solid fa-check ml-2"></i></p>
                 </form>
             </div>
         </section>
@@ -226,7 +228,7 @@
         </section>
 
         <!-- Reports section -->
-        <section class="lg:px-28"> 
+        <section class="p-5 lg:px-28"> 
             <div class="p-8 mt-10 bg-slate-50 rounded drop-shadow-lg hidden" id="reports">
                 <h2 class="text-4xl font-bold mb-10 mt-4">Reportes</h2>
                 <div class="flex flex-col items-center text-center mt-28 mb-32" id="no-reports">
