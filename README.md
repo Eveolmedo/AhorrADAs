@@ -2,7 +2,7 @@
 
 ### AhorrADAs es una aplicación web que te permite llevar un registro de tus gastos e ingresos de manera sencilla y eficiente.
 
-#### Para visualizar la página [click aqui](https://eveolmedo.github.io/Generador-de-memes/)
+#### Para visualizar la página [click aqui](https://eveolmedo.github.io/AhorrADAs/)
 
 
 #### Funcionalidades
