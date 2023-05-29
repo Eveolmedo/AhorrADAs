@@ -120,17 +120,16 @@ const renderCategoriesTable = (categories) => {
     }
 }
 
-const revenue = (operations) => operations.filter((operation) => operation.type === "ganancia") 
-const expense = (operations) => operations.filter((operation) => operation.type === "gasto")
-
 const renderReportTable = (operations) => {
+    const revenue = (operations) => operations.filter((operation) => operation.type === "ganancia") 
+    const expense = (operations) => operations.filter((operation) => operation.type === "gasto")
     cleanContainer(".table-reports")
     cleanContainer(".table-reports-category")
     cleanContainer(".table-reports-month") 
     if (revenue(operations).length && expense(operations).length) {
         hideElements(["#no-reports"])
         showElements([".reports-table-section"])
-        for (const category of findCategoryWithMaxValue(allOperations, "ganancias")) {
+        for (const category of findCategoryWithMaxValue(getLocalInfo("operations"), "ganancias")) {
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category.category)
             $(".table-reports").innerHTML += `
                 <tr>
@@ -140,7 +139,7 @@ const renderReportTable = (operations) => {
                 <tr>
             `
         }
-        for (const category of findCategoryWithMaxValue(allOperations, "gastos")) {
+        for (const category of findCategoryWithMaxValue(getLocalInfo("operations"), "gastos")) {
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category.category)
             $(".table-reports").innerHTML += `
                 <tr>
@@ -150,7 +149,7 @@ const renderReportTable = (operations) => {
                 <tr>
             `
         }
-        for (const category of categoryMoreBalance(allOperations)) {
+        for (const category of categoryMoreBalance(getLocalInfo("operations"))) {
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category.category)
             if (categorySelected) {
                 $(".table-reports").innerHTML += `
@@ -162,7 +161,7 @@ const renderReportTable = (operations) => {
                 `
             }
         }
-        for (const month of findMonthWithMaxValue(allOperations, "ganancias")) {
+        for (const month of findMonthWithMaxValue(getLocalInfo("operations"), "ganancias")) {
             $(".table-reports").innerHTML += `
                 <tr>
                     <th class="my-4 mb-5">Mes con mayor ganancia</th>
@@ -171,7 +170,7 @@ const renderReportTable = (operations) => {
                 <tr>
             `
         }
-        for (const month of findMonthWithMaxValue(allOperations, "gastos")) {
+        for (const month of findMonthWithMaxValue(getLocalInfo("operations"), "gastos")) {
             $(".table-reports").innerHTML += `
                 <tr>
                     <th class="my-4 mb-5">Mes con mayor gasto</th>
@@ -180,7 +179,7 @@ const renderReportTable = (operations) => {
                 <tr>
             `
         }
-        for (const category of totalsByCategory(allOperations)){
+        for (const category of totalsByCategory(getLocalInfo("operations"))){
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category.category)
             $(".table-reports-category").innerHTML += `
                 <td class="text-emerald-600">${categorySelected.categoryName}</td>
@@ -189,7 +188,7 @@ const renderReportTable = (operations) => {
                 <td>$${category.ganancias - category.gastos}</td>
             `
         }
-        for (const month of totalsByMonth(allOperations)) {
+        for (const month of totalsByMonth(getLocalInfo("operations"))) {
             $(".table-reports-month").innerHTML += `
                 <td>${new Date(month.month).getMonth() + 1}/${new Date(month.month).getFullYear()}</td>
                 <td class="text-green-500">+$${month.ganancias}</td>
@@ -567,9 +566,6 @@ const initializeApp = () => {
     // Balance
     showBalance(allOperations)
 
-    // Reports
-    renderReportTable(allOperations)
-
     // Dates in inputs
     dates()
 
@@ -590,6 +586,13 @@ const initializeApp = () => {
         showElements(["#operation", ".new-operation-title"])
     })
 
+    $("#amount").addEventListener("input", (e) => {
+        const value = e.target.valueAsNumber
+        if (isNaN(value)) {
+            $("#amount").value = ""
+        }
+    })
+
     $("#btn-submit-category").addEventListener("click", (e) => {
         e.preventDefault()
         if (validateCategory()) {
@@ -606,7 +609,7 @@ const initializeApp = () => {
             editOperation()
             hideElements(["#operation"])
             showElements(["#balance"])
-            renderOperation(allOperations)
+            renderOperation(getLocalInfo("operations"))
         }
     })
 
@@ -633,11 +636,10 @@ const initializeApp = () => {
         button.addEventListener("click", () => {
             showElements(["#reports"])
             hideElements(["#balance", "#category-section", "#operation"])
-            renderOperation(getLocalInfo("operations"))
             renderReportTable(getLocalInfo("operations"))
         })
     }
-    
+
     $(".hide-filter").addEventListener("click", () => {
         hideElements([".filter-form", ".hide-filter"])
         showElements([".show-filter"])
@@ -656,15 +658,21 @@ const initializeApp = () => {
 
     $("#filter-sort").addEventListener ("change", filters)
     
-    $(".burger-menu").addEventListener('click', () =>{
+    $(".burger-menu").addEventListener("click", () => {
         showElements([".menu", ".close-navbar-menu"])
         hideElements([".burger-menu"])
     })
     
-    $(".close-navbar-menu").addEventListener('click', () =>{
+    $(".close-navbar-menu").addEventListener("click", () => {
         showElements([".burger-menu"])
         hideElements([".menu", ".close-navbar-menu"])
     })
+
+    $(".btn-cancel-category").addEventListener("click", () => {
+        showElements(["#table-category", "#btn-submit-category", ".category-title", "#edit-category"])
+        hideElements([".btns-edit-category", ".edit-category-title", "#new-category"])
+    })
+
 }
 
 window.addEventListener("load", initializeApp)
