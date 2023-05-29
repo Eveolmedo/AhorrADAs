@@ -590,6 +590,13 @@ const initializeApp = () => {
         showElements(["#operation", ".new-operation-title"])
     })
 
+    $("#amount").addEventListener("input", (e) => {
+        const value = e.target.valueAsNumber
+        if (isNaN(value)) {
+            $("#amount").value = ""
+        }
+    })
+
     $("#btn-submit-category").addEventListener("click", (e) => {
         e.preventDefault()
         if (validateCategory()) {
@@ -606,7 +613,7 @@ const initializeApp = () => {
             editOperation()
             hideElements(["#operation"])
             showElements(["#balance"])
-            renderOperation(allOperations)
+            renderOperation(getLocalInfo("operations"))
         }
     })
 
@@ -665,6 +672,7 @@ const initializeApp = () => {
         showElements([".burger-menu"])
         hideElements([".menu", ".close-navbar-menu"])
     })
+
 }
 
 window.addEventListener("load", initializeApp)
