@@ -180,12 +180,14 @@
                         <select name="category" id="form-category" class="p-2 my-2 border-2 rounded">
                             <!-- Here we will render categories from localstorage or the default ones -->
                         </select>
+                        <p class="m-2 text-red-800 hidden category-form-error"><i class="fa-sharp fa-solid fa-circle-exclamation mr-2"></i>Agregue una categoría</p>
                     </fieldset>
                     <fieldset class="flex flex-col">
                         <label for="operation-date" class="font-bold">
                             Fecha
                         </label>
                         <input type="date" name="operation-date" id="date" class="p-2 my-2 border-2 rounded date">
+                        <p class="m-2 text-red-800 hidden date-error"><i class="fa-sharp fa-solid fa-circle-exclamation mr-2"></i>Fecha no permitida</p>
                     </fieldset>
                     <fieldset class="flex justify-end mt-8">
                         <button class="py-2 px-4 rounded btn-cancel">Cancelar</button>
