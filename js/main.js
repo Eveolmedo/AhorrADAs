@@ -250,17 +250,16 @@ const deleteCategory = (id) => {
 
 // EDIT BUTTONS
 
-const editOperation = () => {
-    const operationId = $("#btn-edit").getAttribute("data-id")
-    const editedOperation = getLocalInfo("operations").map((operation) => {
-        if(operation.id === operationId){
-            return saveOperationInfo(operation.id)
+const editData = (dataKey, itemId, saveInfo) => {
+    const editedData = getLocalInfo(dataKey).map((item) => {
+        if (item.id === itemId) {
+            return saveInfo(item.id)
         }
-        return operation
+        return item
     })
-    setLocalInfo("operations", editedOperation)
+    setLocalInfo(dataKey, editedData)
 }
-
+  
 const editOperationForm = (id) => {
     hideElements(["#balance", "#btn-submit", ".new-operation-title"])
     showElements(["#operation", "#btn-edit", ".edit-operation-title"])
@@ -271,17 +270,6 @@ const editOperationForm = (id) => {
     $("#type").value = operationSelect.type
     $("#form-category").value = operationSelect.category
     $("#date").value = new Date(operationSelect.date).toISOString().split('T')[0]
-}
-
-const editCategory = () => {
-    const categoryId = $("#btn-category-edit").getAttribute("data-id")
-    const editedCategory = getLocalInfo("categories").map((category) =>{
-        if (category.id === categoryId) {    
-            return saveCategoryInfo(category.id) 
-        }
-        return category
-    })
-    setLocalInfo("categories", editedCategory)
 }
   
 const editCategoryTable = (id) => {
@@ -622,7 +610,7 @@ const initializeApp = () => {
     $("#btn-edit").addEventListener("click", (e) => {
         e.preventDefault()
         if (validateForm()){
-            editOperation()
+            editData("operations", $("#btn-edit").getAttribute("data-id"), saveOperationInfo)
             hideElements(["#operation"])
             showElements(["#balance"])
             renderOperation(getLocalInfo("operations"))
@@ -632,7 +620,7 @@ const initializeApp = () => {
     $("#btn-category-edit").addEventListener("click", (e) => {
         e.preventDefault()
         if (validateCategory()) {
-            editCategory()
+            editData("categories", $("#btn-category-edit").getAttribute("data-id"), saveCategoryInfo)
             showElements(["#table-category", "#btn-submit-category", ".category-title", "#edit-category"])
             hideElements([".btns-edit-category", ".edit-category-title", "#new-category"])
             renderCategoriesTable(getLocalInfo("categories"))
