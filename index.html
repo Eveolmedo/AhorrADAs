@@ -26,7 +26,7 @@
                         <i class="fa-solid fa-xmark p-4 hover:bg-emerald-600"></i>
                     </button>
                 </div>
-                <ul class="hidden lg:flex justify-around w-1/3" id="navbar-menu">
+                <ul class="hidden lg:flex w-2/5" id="navbar-menu">
                     <li class="p-2 hover:bg-emerald-600 rounded">
                         <a href="index.html"><i class="fas fa-chart-line mr-2"></i>Balance</a>
                     </li>
@@ -39,7 +39,7 @@
                 </ul>
         </nav>
         <div class="menu-container bg-slate-50 drop-shadow-lg lg:hidden">
-            <nav class="menu p-2 hidden">
+            <div class="menu p-2 hidden">
               <ul>
                 <li class="p-2 hover:bg-emerald-600">
                     <a href="index.html"><i class="fas fa-chart-line mr-2"></i>Balance</a>
@@ -51,7 +51,7 @@
                     <a href="#"><i class="fas fa-chart-pie mr-2"></i>Reportes</a>
                 </li>
               </ul>
-            </nav>
+            </div>
         </div>
     </header>
     <main class="w-full lg:px-32 xl:px-44">
@@ -165,7 +165,7 @@
                         <input type="number" name="" id="amount" value="0" class="p-2 my-2 border-2 rounded">
                     </fieldset>
                     <fieldset class="flex flex-col">
-                        <label for="" class="font-bold">
+                        <label for="type" class="font-bold">
                             Tipo
                         </label>
                         <select name="" id="type" class="p-2 my-2 border-2 rounded">
@@ -178,14 +178,16 @@
                             Categoría
                         </label>
                         <select name="category" id="form-category" class="p-2 my-2 border-2 rounded">
-                            
+                            <!-- Here we will render categories from localstorage or the default ones -->
                         </select>
+                        <p class="m-2 text-red-800 hidden category-form-error"><i class="fa-sharp fa-solid fa-circle-exclamation mr-2"></i>Agregue una categoría</p>
                     </fieldset>
                     <fieldset class="flex flex-col">
                         <label for="operation-date" class="font-bold">
                             Fecha
                         </label>
                         <input type="date" name="operation-date" id="date" class="p-2 my-2 border-2 rounded date">
+                        <p class="m-2 text-red-800 hidden date-error"><i class="fa-sharp fa-solid fa-circle-exclamation mr-2"></i>Fecha no permitida</p>
                     </fieldset>
                     <fieldset class="flex justify-end mt-8">
                         <button class="py-2 px-4 rounded btn-cancel">Cancelar</button>
@@ -240,7 +242,7 @@
                     <h2 class="text-2xl font-bold mt-4 mb-8">Resumen</h2>
                     <table class="w-full text-left border-separate border-spacing-y-4 mb-20">      
                         <tbody class="table-reports">
-                    <!-- Here I generate my report table based on the data of the operations fetched from local storage -->
+                            <!-- Here I generate my report table based on the data of the operations fetched from local storage -->
                         </tbody>
                     </table>
                     <h2 class="text-2xl font-bold mb-5 mt-4">Totales por categorías</h2>
@@ -254,7 +256,7 @@
                             </tr>
                         </thead>
                         <tbody class="table-reports-category">
-                    <!-- Here I generate my report table based on the data of the operations fetched from local storage -->        
+                            <!-- Here I generate my report table based on the data of the operations fetched from local storage -->        
                         </tbody>
                     </table>
                     <h2 class="text-2xl font-bold mb-5 mt-4">Totales por mes</h2>
@@ -268,7 +270,7 @@
                             </tr>
                         </thead>
                         <tbody class="table-reports-month">
-                    <!-- Here I generate my report table based on the data of the operations fetched from local storage -->        
+                            <!-- Here I generate my report table based on the data of the operations fetched from local storage -->        
                         </tbody>
                 </div>
             </div>
