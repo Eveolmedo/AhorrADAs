@@ -129,7 +129,7 @@ const renderReportTable = (operations) => {
     if (revenue(operations).length && expense(operations).length) {
         hideElements(["#no-reports"])
         showElements([".reports-table-section"])
-        for (const category of findCategoryWithMaxValue(getLocalInfo("operations"), "ganancias")) {
+        for (const category of findCategoryWithMaxValue(operations, "ganancias")) {
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category.category)
             $(".table-reports").innerHTML += `
                 <tr>
@@ -139,7 +139,7 @@ const renderReportTable = (operations) => {
                 <tr>
             `
         }
-        for (const category of findCategoryWithMaxValue(getLocalInfo("operations"), "gastos")) {
+        for (const category of findCategoryWithMaxValue(operations, "gastos")) {
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category.category)
             $(".table-reports").innerHTML += `
                 <tr>
@@ -149,7 +149,7 @@ const renderReportTable = (operations) => {
                 <tr>
             `
         }
-        for (const category of categoryMoreBalance(getLocalInfo("operations"))) {
+        for (const category of categoryMoreBalance(operations)) {
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category.category)
             if (categorySelected) {
                 $(".table-reports").innerHTML += `
@@ -161,7 +161,7 @@ const renderReportTable = (operations) => {
                 `
             }
         }
-        for (const month of findMonthWithMaxValue(getLocalInfo("operations"), "ganancias")) {
+        for (const month of findMonthWithMaxValue(operations, "ganancias")) {
             $(".table-reports").innerHTML += `
                 <tr>
                     <th class="my-4 mb-5">Mes con mayor ganancia</th>
@@ -170,7 +170,7 @@ const renderReportTable = (operations) => {
                 <tr>
             `
         }
-        for (const month of findMonthWithMaxValue(getLocalInfo("operations"), "gastos")) {
+        for (const month of findMonthWithMaxValue(operations, "gastos")) {
             $(".table-reports").innerHTML += `
                 <tr>
                     <th class="my-4 mb-5">Mes con mayor gasto</th>
@@ -179,7 +179,7 @@ const renderReportTable = (operations) => {
                 <tr>
             `
         }
-        for (const category of totalsByCategory(getLocalInfo("operations"))){
+        for (const category of totalsByCategory(operations)){
             const categorySelected = getLocalInfo("categories").find(cat => cat.id === category.category)
             $(".table-reports-category").innerHTML += `
                 <td class="text-emerald-600">${categorySelected.categoryName}</td>
@@ -188,7 +188,7 @@ const renderReportTable = (operations) => {
                 <td>$${category.ganancias - category.gastos}</td>
             `
         }
-        for (const month of totalsByMonth(getLocalInfo("operations"))) {
+        for (const month of totalsByMonth(operations)) {
             $(".table-reports-month").innerHTML += `
                 <td>${new Date(month.month).getMonth() + 1}/${new Date(month.month).getFullYear()}</td>
                 <td class="text-green-500">+$${month.ganancias}</td>
@@ -250,17 +250,16 @@ const deleteCategory = (id) => {
 
 // EDIT BUTTONS
 
-const editOperation = () => {
-    const operationId = $("#btn-edit").getAttribute("data-id")
-    const editedOperation = getLocalInfo("operations").map((operation) => {
-        if(operation.id === operationId){
-            return saveOperationInfo(operation.id)
+const editData = (dataKey, itemId, saveInfo) => {
+    const editedData = getLocalInfo(dataKey).map((item) => {
+        if (item.id === itemId) {
+            return saveInfo(item.id)
         }
-        return operation
+        return item
     })
-    setLocalInfo("operations", editedOperation)
+    setLocalInfo(dataKey, editedData)
 }
-
+  
 const editOperationForm = (id) => {
     hideElements(["#balance", "#btn-submit", ".new-operation-title"])
     showElements(["#operation", "#btn-edit", ".edit-operation-title"])
@@ -271,17 +270,6 @@ const editOperationForm = (id) => {
     $("#type").value = operationSelect.type
     $("#form-category").value = operationSelect.category
     $("#date").value = new Date(operationSelect.date).toISOString().split('T')[0]
-}
-
-const editCategory = () => {
-    const categoryId = $("#btn-category-edit").getAttribute("data-id")
-    const editedCategory = getLocalInfo("categories").map((category) =>{
-        if (category.id === categoryId) {    
-            return saveCategoryInfo(category.id) 
-        }
-        return category
-    })
-    setLocalInfo("categories", editedCategory)
 }
   
 const editCategoryTable = (id) => {
@@ -296,6 +284,8 @@ const editCategoryTable = (id) => {
 
 const validateForm = () => {
     const description = $("#description").value.trim()
+    const category = $("#form-category").value
+    const date =  (new Date($("#date").value.replace(/-/g, '/')))
 
     if (description == "") {
         showElements([".description-error"])
@@ -303,7 +293,21 @@ const validateForm = () => {
         hideElements([".description-error"])
     }
 
-    return description !== ""
+    if (category == "") {
+        showElements([".category-form-error"])
+    } else {
+        hideElements([".category-form-error"])
+    }
+
+    const fechaActual = new Date()
+    if (date > fechaActual) {
+        showElements([".date-error"])
+    } else {
+        hideElements([".date-error"])
+    }
+    
+
+    return description !== "" && category !== "" && fechaActual > date
 }
 
 const validateCategory = () => {
@@ -606,7 +610,7 @@ const initializeApp = () => {
     $("#btn-edit").addEventListener("click", (e) => {
         e.preventDefault()
         if (validateForm()){
-            editOperation()
+            editData("operations", $("#btn-edit").getAttribute("data-id"), saveOperationInfo)
             hideElements(["#operation"])
             showElements(["#balance"])
             renderOperation(getLocalInfo("operations"))
@@ -616,7 +620,7 @@ const initializeApp = () => {
     $("#btn-category-edit").addEventListener("click", (e) => {
         e.preventDefault()
         if (validateCategory()) {
-            editCategory()
+            editData("categories", $("#btn-category-edit").getAttribute("data-id"), saveCategoryInfo)
             showElements(["#table-category", "#btn-submit-category", ".category-title", "#edit-category"])
             hideElements([".btns-edit-category", ".edit-category-title", "#new-category"])
             renderCategoriesTable(getLocalInfo("categories"))
