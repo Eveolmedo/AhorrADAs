@@ -506,7 +506,7 @@ const filters = () => {
     })
 
     const filterDate = filterCategory.filter((operation) => {
-        return new Date(operation.date).getDate() >= date.getDate() && new Date(operation.date).getMonth() === date.getMonth()
+        return new Date(operation.date).getDate() >= date.getDate() && new Date(operation.date).getMonth() >= date.getMonth()
     })
 
    const filterSort = filterDate.sort((a, b) => {
