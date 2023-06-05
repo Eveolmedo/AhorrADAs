@@ -299,15 +299,15 @@ const validateForm = () => {
         hideElements([".category-form-error"])
     }
 
-    const fechaActual = new Date()
-    if (date > fechaActual) {
+    const currentDate = new Date()
+
+    if (date > currentDate) {
         showElements([".date-error"])
     } else {
         hideElements([".date-error"])
     }
     
-
-    return description !== "" && category !== "" && fechaActual > date
+    return description !== "" && category !== "" && currentDate > date
 }
 
 const validateCategory = () => {
@@ -506,7 +506,7 @@ const filters = () => {
     })
 
     const filterDate = filterCategory.filter((operation) => {
-        return new Date(operation.date).getDate() >= date.getDate()
+        return new Date(operation.date).getDate() >= date.getDate() && new Date(operation.date).getMonth() >= date.getMonth()
     })
 
    const filterSort = filterDate.sort((a, b) => {
@@ -572,6 +572,9 @@ const initializeApp = () => {
 
     // Dates in inputs
     dates()
+
+    // I added the filters so that only the operations of the current month are seen
+    filters()
 
     // Buttons 
 
